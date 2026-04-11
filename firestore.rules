@@ -1,0 +1,175 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: config
+    // Document ID: liveStatus
+    // Fields:
+    //   - isLive: boolean (required) - Indicates if the stream is live
+    //
+    // Document ID: schedule
+    // Fields:
+    //   - items: list (required) - Array of schedule items
+    //
+    // Document ID: contentLinks
+    // Fields:
+    //   - clips4SaleRss: string (required) - URL to Clips4Sale RSS
+    //   - pornhubNode: string (required) - URL to Pornhub model node
+    //   - onlyFansUrl: string (optional) - URL to OnlyFans page
+    //
+    // Document ID: webhooks
+    // Fields:
+    //   - discordUrl: string (required) - URL to Discord Webhook
+    //   - liveMessage: string (required) - Message to send when going live
+    //
+    // Document ID: brandSocials
+    // Fields:
+    //   - twitter: string (optional)
+    //   - instagram: string (optional)
+    //   - reddit: string (optional)
+    //   - bluesky: string (optional)
+    //   - discord: string (optional)
+    //   - snapchat: string (optional)
+    //   - threads: string (optional)
+    //   - tiktok: string (optional)
+    //   - tumblr: string (optional)
+    //
+    // Collection: users
+    // Document ID: {userId}
+    // Fields:
+    //   - unlockedAssets: list (optional) - Array of unlocked asset IDs
+    //   - socialHandles: map (optional) - Map of user's social handles
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+             request.auth.token.email == "musclehed03@gmail.com" && 
+             request.auth.token.email_verified == true;
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+    function isValidLiveStatus(data) {
+      return data.keys().hasOnly(['isLive']) && data.isLive is bool;
+    }
+
+    function isValidSchedule(data) {
+      return data.keys().hasOnly(['items']) && 
+             data.items is list && 
+             data.items.size() <= 20;
+    }
+
+    function isValidContentLinks(data) {
+      return data.keys().hasOnly(['clips4SaleRss', 'pornhubNode', 'onlyFansUrl']) &&
+             data.clips4SaleRss is string && data.clips4SaleRss.size() < 500 &&
+             data.pornhubNode is string && data.pornhubNode.size() < 500 &&
+             (!('onlyFansUrl' in data) || (data.onlyFansUrl is string && data.onlyFansUrl.size() < 500));
+    }
+
+    function isValidWebhooks(data) {
+      return data.keys().hasOnly(['discordUrl', 'liveMessage']) &&
+             data.discordUrl is string && data.discordUrl.size() < 1000 &&
+             data.liveMessage is string && data.liveMessage.size() < 2000;
+    }
+
+    function isValidBrandSocials(data) {
+      return data.keys().hasOnly(['twitter', 'instagram', 'reddit', 'bluesky', 'discord', 'snapchat', 'threads', 'tiktok', 'tumblr']) &&
+             (!('twitter' in data) || (data.twitter is string && data.twitter.size() < 500)) &&
+             (!('instagram' in data) || (data.instagram is string && data.instagram.size() < 500)) &&
+             (!('reddit' in data) || (data.reddit is string && data.reddit.size() < 500)) &&
+             (!('bluesky' in data) || (data.bluesky is string && data.bluesky.size() < 500)) &&
+             (!('discord' in data) || (data.discord is string && data.discord.size() < 500)) &&
+             (!('snapchat' in data) || (data.snapchat is string && data.snapchat.size() < 500)) &&
+             (!('threads' in data) || (data.threads is string && data.threads.size() < 500)) &&
+             (!('tiktok' in data) || (data.tiktok is string && data.tiktok.size() < 500)) &&
+             (!('tumblr' in data) || (data.tumblr is string && data.tumblr.size() < 500));
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasOnly(['unlockedAssets', 'socialHandles']) && 
+             (!('unlockedAssets' in data) || (data.unlockedAssets is list && data.unlockedAssets.size() <= 1000)) &&
+             (!('socialHandles' in data) || (
+               data.socialHandles is map && 
+               data.socialHandles.keys().hasOnly(['twitter', 'instagram', 'reddit', 'bluesky', 'discord', 'snapchat', 'threads', 'tiktok', 'tumblr']) &&
+               (!('twitter' in data.socialHandles) || (data.socialHandles.twitter is string && data.socialHandles.twitter.size() < 100)) &&
+               (!('instagram' in data.socialHandles) || (data.socialHandles.instagram is string && data.socialHandles.instagram.size() < 100)) &&
+               (!('reddit' in data.socialHandles) || (data.socialHandles.reddit is string && data.socialHandles.reddit.size() < 100)) &&
+               (!('bluesky' in data.socialHandles) || (data.socialHandles.bluesky is string && data.socialHandles.bluesky.size() < 100)) &&
+               (!('discord' in data.socialHandles) || (data.socialHandles.discord is string && data.socialHandles.discord.size() < 100)) &&
+               (!('snapchat' in data.socialHandles) || (data.socialHandles.snapchat is string && data.socialHandles.snapchat.size() < 100)) &&
+               (!('threads' in data.socialHandles) || (data.socialHandles.threads is string && data.socialHandles.threads.size() < 100)) &&
+               (!('tiktok' in data.socialHandles) || (data.socialHandles.tiktok is string && data.socialHandles.tiktok.size() < 100)) &&
+               (!('tumblr' in data.socialHandles) || (data.socialHandles.tumblr is string && data.socialHandles.tumblr.size() < 100))
+             ));
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+    
+    match /users/{userId} {
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow create: if isAuthenticated() && request.auth.uid == userId && isValidUser(request.resource.data);
+      allow update: if isAuthenticated() && request.auth.uid == userId && isValidUser(request.resource.data);
+      allow delete: if false;
+    }
+
+    match /config/liveStatus {
+      // Public can read the live status
+      allow read: if true;
+      allow create: if isAdmin() && isValidLiveStatus(request.resource.data);
+      allow update: if isAdmin() && isValidLiveStatus(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /config/schedule {
+      // Public can read the schedule
+      allow read: if true;
+      allow create: if isAdmin() && isValidSchedule(request.resource.data);
+      allow update: if isAdmin() && isValidSchedule(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /config/contentLinks {
+      // Public can read the content links
+      allow read: if true;
+      allow create: if isAdmin() && isValidContentLinks(request.resource.data);
+      allow update: if isAdmin() && isValidContentLinks(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /config/webhooks {
+      // Only admin can read and write webhooks
+      allow read: if isAdmin();
+      allow create: if isAdmin() && isValidWebhooks(request.resource.data);
+      allow update: if isAdmin() && isValidWebhooks(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /config/brandSocials {
+      // Public can read the brand socials
+      allow read: if true;
+      allow create: if isAdmin() && isValidBrandSocials(request.resource.data);
+      allow update: if isAdmin() && isValidBrandSocials(request.resource.data);
+      allow delete: if isAdmin();
+    }
+    
+    // Default deny for everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
