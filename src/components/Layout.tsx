@@ -8,15 +8,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.05)_0%,_rgba(255,255,255,0)_60%)]"></div>
 
       {/* Navigation Landmark */}
-      <nav className="z-20 w-full p-6" aria-label="Main Navigation">
-         {/* Your Logo or Home Link goes here */}
-         <a href="/" className="text-magenta-500 font-black tracking-tighter text-xl hover:glow-magenta transition-all">
+      <nav className="z-20 w-full p-6 flex justify-between items-center" aria-label="Main Navigation">
+         <a href="/" className="text-magenta-500 font-black tracking-tighter text-xl hover:text-white transition-all">
            DOLLHOUSE DEVIANTS
          </a>
+         {/* Add any top-right nav links here later */}
       </nav>
       
       {/* Main Content Landmark */}
-      <main className="flex-grow flex flex-col items-center relative z-10 px-6 pt-10 pb-20">
+      <main className="flex-grow flex flex-col items-center relative z-10 px-6 pt-10 pb-20 w-full">
         {children}
       </main>
 

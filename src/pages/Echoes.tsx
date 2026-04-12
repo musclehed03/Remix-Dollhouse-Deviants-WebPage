@@ -1,76 +1,36 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Layout from '../components/Layout';
-import { SafeImage } from '../components/SafeImage';
-import { PenLine, History } from 'lucide-react';
+import { PenTool, Scroll } from 'lucide-react';
 
 const Echoes = () => {
   return (
     <Layout>
-      <div className="max-w-4xl w-full">
+      <div className="max-w-3xl w-full">
         <header className="text-center mb-16">
-          <h1 className="text-6xl font-black tracking-tighter uppercase glow-scarlet mb-2 text-[#FF3131]">
-            The Echoes
-          </h1>
-          <p className="text-zinc-500 font-mono tracking-widest uppercase text-xs">
-            A Safe Space Journal for Neurodivergence & Identity
-          </p>
+          <h1 className="text-6xl font-black uppercase text-[#FF3131] drop-shadow-[0_0_15px_rgba(255,49,49,0.5)]">The Echoes</h1>
+          <p className="text-zinc-500 font-mono text-xs tracking-[0.3em] mt-4">A SAFE SPACE JOURNAL</p>
         </header>
 
-        {/* New Entry Form - Accessibility First */}
-        <section className="mb-20 p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl" aria-labelledby="new-entry-title">
-          <h2 id="new-entry-title" className="text-xl font-bold mb-6 flex items-center gap-2">
-            <PenLine className="text-[#FF3131]" /> Start a New Echo
-          </h2>
-          <div className="space-y-4">
-            <input 
-              type="text" 
-              placeholder="Entry Title..." 
-              className="w-full bg-black border border-zinc-800 p-4 rounded-xl text-white focus:border-[#FF3131] outline-none transition-all"
-            />
-            <textarea 
-              placeholder="What's on your mind today?" 
-              rows={4}
-              className="w-full bg-black border border-zinc-800 p-4 rounded-xl text-white focus:border-[#FF3131] outline-none transition-all"
-            />
-            
-            {/* The Alt Text Requirement */}
-            <div className="p-4 bg-zinc-800/30 rounded-xl border border-dashed border-zinc-700">
-              <label className="text-xs font-mono text-zinc-500 uppercase mb-2 block">
-                Image Upload & Accessibility
-              </label>
-              <input type="file" className="text-sm text-zinc-400 mb-3 block" />
-              <input 
-                type="text" 
-                placeholder="Describe this image for those who cannot see it (Alt Text)..." 
-                className="w-full bg-zinc-900 border border-zinc-700 p-2 rounded-lg text-sm text-zinc-300 italic"
-                aria-label="Image alternative text"
-              />
-            </div>
-            
-            <button className="bg-[#FF3131] text-black font-black py-3 px-8 rounded-full hover:scale-105 active:scale-95 transition-all">
-              POST ENTRY
-            </button>
+        <article className="bg-zinc-900/40 border-l-4 border-[#FF3131] p-10 rounded-r-3xl relative overflow-hidden mb-10">
+          <div className="flex items-center gap-3 text-zinc-600 font-mono text-xs mb-6">
+            <Scroll size={14} /> APRIL 10, 2026 • 8:45 PM
           </div>
-        </section>
-
-        {/* First Entry Example */}
-        <article className="space-y-8">
-          <div className="border-l-2 border-[#FF3131] pl-8 py-4">
-            <time className="text-xs font-mono text-zinc-600">APRIL 10, 2026</time>
-            <h3 className="text-3xl font-black uppercase text-white my-2">The Fire of Transition</h3>
-            <p className="text-zinc-400 leading-relaxed text-lg">
-              Today was a day where the "noise" of the world felt a bit too loud. Being neurodivergent in a linear world often feels like trying to run software on a system that wasn't built for it... but then I remember the sanctuary we're building here.
+          <h2 className="text-3xl font-black text-white mb-6 uppercase tracking-tighter italic">"The Fire of Transition"</h2>
+          <div className="prose prose-invert max-w-none text-zinc-400 leading-relaxed text-lg space-y-6">
+            <p>
+              Today was a day where the "noise" of the world felt a bit too loud. Being neurodivergent in a linear world often feels like trying to run software on a system that wasn't built for it... 
             </p>
-            <div className="mt-6 rounded-2xl overflow-hidden border border-zinc-800">
-              <SafeImage 
-                src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe" 
-                alt="A soft, abstract glow of magenta and orange light representing inner peace."
-                description="This image represents the calming energy I feel when I focus on my transition journey."
-                className="w-full h-64 object-cover"
-              />
-            </div>
+            <p>
+              But then I remember the sanctuary we're building here. This space isn't just a website; it's an echo of the life I'm finally living on my own terms.
+            </p>
           </div>
         </article>
+
+        <div className="flex justify-center">
+          <button className="flex items-center gap-3 bg-zinc-900 border border-zinc-800 text-zinc-400 px-8 py-4 rounded-full hover:border-[#FF3131] hover:text-[#FF3131] transition-all">
+            <PenTool size={18} /> RECORD A NEW ECHO
+          </button>
+        </div>
       </div>
     </Layout>
   );

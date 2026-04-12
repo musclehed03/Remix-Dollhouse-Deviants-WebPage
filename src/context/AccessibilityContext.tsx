@@ -19,7 +19,18 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
   const [highContrast, setHighContrast] = useState(false);
   const [colorBlindMode, setColorBlindMode] = useState(false);
   const [lightMode, setLightMode] = useState(false);
-  const [isLiteMode, setIsLiteMode] = useState(false);
+  const [isLiteMode, setIsLiteMode] = useState(() => {
+    const saved = localStorage.getItem('deviant_lite_mode');
+    return saved === 'true';
+  });
+
+  const toggleLiteMode = () => {
+    setIsLiteMode(prev => {
+      const newVal = !prev;
+      localStorage.setItem('deviant_lite_mode', String(newVal));
+      return newVal;
+    });
+  };
 
   // Apply classes to the body tag so styles ripple through the whole site
   useEffect(() => {
@@ -41,7 +52,7 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
       highContrast, toggleContrast: () => setHighContrast(!highContrast),
       colorBlindMode, toggleColorBlind: () => setColorBlindMode(!colorBlindMode),
       lightMode, toggleLightMode: () => setLightMode(!lightMode),
-      isLiteMode, toggleLiteMode: () => setIsLiteMode(!isLiteMode)
+      isLiteMode, toggleLiteMode
     }}>
       {children}
     </AccessContext.Provider>
