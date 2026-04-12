@@ -9,7 +9,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       {/* Navigation Landmark */}
       <nav className="z-20 w-full p-6 flex justify-between items-center" aria-label="Main Navigation">
-         <a href="/" className="text-magenta-500 font-black tracking-tighter text-xl hover:text-white transition-all">
+         <a href="/" className="flex items-center gap-3 text-magenta-500 font-black tracking-tighter text-xl hover:text-white transition-all">
+           <img src="/DD SFW Logo No Main.jpg" alt="Dollhouse Deviants Logo" className="h-10 w-auto rounded-md" />
            DOLLHOUSE DEVIANTS
          </a>
          {/* Add any top-right nav links here later */}

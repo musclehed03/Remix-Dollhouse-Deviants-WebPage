@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { Navigate, Link } from 'react-router-dom';
 import { db } from '@/lib/firebase';
 import { doc, onSnapshot, setDoc, getDoc } from 'firebase/firestore';
-import { VAULT_ASSETS } from '../data/assets';
+import { VAULT_ASSETS } from '../assets';
 import { User, LogOut, Film, ArrowLeft, ShieldCheck, Twitter, Instagram, MessageCircle, ExternalLink, Save, Cloud, MessageSquare, Ghost, AtSign, Music, Type } from 'lucide-react';
 import SafeImage from '../components/SafeImage';
 

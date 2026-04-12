@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider } from './context/AuthContext';
 import { AccessibilityProvider } from './context/AccessibilityContext';
 import Home from './pages/Home';
+import SplashScreen from './pages/SplashScreen';
 import SplashGate from './pages/SplashGate';
 import AdminDashboard from './pages/AdminDashboard';
 import Vault from './pages/Vault';
@@ -35,7 +36,8 @@ export default function App() {
           <TrevorBanner />
           <AccessibilityMenu />
           <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<SplashScreen />} />
+          <Route path="/hub" element={<Home />} />
           <Route path="/gate" element={<SplashGate />} />
           <Route path="/vault" element={<Vault />} />
           <Route path="/studio" element={<Studio />} />

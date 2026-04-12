@@ -9,7 +9,7 @@ import Footer from '../components/Footer';
 import SafeImage from '../components/SafeImage';
 import { db } from '@/lib/firebase';
 import { doc, setDoc, arrayUnion, onSnapshot } from 'firebase/firestore';
-import { VAULT_ASSETS } from '../data/assets';
+import { VAULT_ASSETS } from '../assets';
 
 export default function Vault() {
   const { isAgeVerified, user, loginWithGoogle } = useAuth();
