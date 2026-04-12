@@ -80,24 +80,10 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-zinc-900 flex flex-col md:flex-row justify-between items-center gap-6">
-        <p className="text-[8px] tracking-[0.5em] text-zinc-700">
+      <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-zinc-900 flex flex-col md:flex-row justify-center items-center gap-6">
+        <p className="text-[8px] tracking-[0.5em] text-zinc-700 text-center">
           ALL CONTENT © 2026 DOLLHOUSE DEVIANTS PRODUCTIONS • WAVERLY, IA
         </p>
-        {/* LITE MODE TOGGLE */}
-        <button 
-          onClick={toggleLiteMode}
-          className={`flex items-center gap-3 px-6 py-3 rounded-full border transition-all ${
-            isLiteMode 
-            ? 'bg-magenta-500/10 border-magenta-500 text-magenta-500' 
-            : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:text-white'
-          }`}
-        >
-          {isLiteMode ? <ZapOff size={16} /> : <Zap size={16} />}
-          <span className="text-xs font-black uppercase tracking-tighter">
-            {isLiteMode ? 'LITE MODE: ON (Data Saving)' : 'LITE MODE: OFF'}
-          </span>
-        </button>
       </div>
     </footer>
   );

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
 import SafeImage from '../components/SafeImage';
+import ShortFilmHero from '../components/ShortFilmHero';
 
 const PHOTOS = [
   { id: 1, title: 'May Celebration', category: 'Editorial', url: 'https://raw.githubusercontent.com/musclehed03/dollhouse-media/main/Dollhouse-Media/04a21aed-6dc9-4f2e-ac00-2a806f6e2452.jpg' },
@@ -28,6 +29,17 @@ export default function Studio() {
         <h1 className="text-4xl font-light tracking-[0.3em] uppercase">The Studio</h1>
         <div className="w-24"></div>
       </nav>
+
+      {/* Featured Short Film */}
+      <ShortFilmHero 
+        title="Neon Genesis"
+        director="Sonja Kelley"
+        duration="04:20"
+        narrative="An exploration of identity and transition through the lens of cyberpunk aesthetics and high-fashion editorial. A visual poem about reclaiming the body."
+        videoUrl="https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" 
+        posterUrl="https://raw.githubusercontent.com/musclehed03/dollhouse-media/main/Dollhouse-Media/1775469453622.png"
+        ethicalNote="18 U.S.C. § 2257 Record-Keeping Requirements Compliance Statement Applies."
+      />
 
       {/* Cinematic Masonry Grid */}
       <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">

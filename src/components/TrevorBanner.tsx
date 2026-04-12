@@ -50,7 +50,7 @@ export default function TrevorBanner() {
           <SafeImage 
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/The_Trevor_Project_logo.svg/512px-The_Trevor_Project_logo.svg.png" 
             alt="The Trevor Project" 
-            className="h-4 w-auto filter brightness-0 invert"
+            className="h-4 w-auto filter brightness-0 invert !grayscale-0"
             referrerPolicy="no-referrer"
             onError={() => setImageError(true)}
           />
