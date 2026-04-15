@@ -20,6 +20,7 @@ import Creations from './pages/Creations';
 import Circuit from './pages/Circuit';
 import Echoes from './pages/Echoes';
 import About from './pages/About';
+import OurStory from './pages/OurStory';
 import Compliance from './pages/Compliance';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
@@ -53,6 +54,7 @@ export default function App() {
           <Route path="/circuit" element={<Circuit />} />
           <Route path="/echoes" element={<Echoes />} />
           <Route path="/about" element={<About />} />
+          <Route path="/our-story" element={<OurStory />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/compliance" element={<Compliance />} />
           <Route path="/privacy" element={<Privacy />} />
