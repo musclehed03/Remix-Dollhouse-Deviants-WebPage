@@ -1,106 +1,79 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import Footer from '../components/Footer';
-import SafeImage from '../components/SafeImage';
+import Layout from '../components/Layout';
+import { useAccess } from '../context/AccessibilityContext';
+import { Camera, Palette, ExternalLink, Info } from 'lucide-react';
 
-const WRITINGS = [
-  {
-    id: 1,
-    title: "The Chrysalis",
-    author: "Sonja Kelley",
-    excerpt: "In the silence between breaths, the shift began. Not a breaking, but a blooming...",
-    content: "Full poem content goes here...",
-    type: "Poetry"
-  },
-  // Add more contributor writings here
-];
-
-const ARTWORK = [
-  {
-    id: 1,
-    title: "Abstract Identity",
-    artist: "Guest Artist",
-    url: "https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&w=800&q=80",
-    category: "Painting"
-  }
+const artworks = [
+  { id: 1, title: 'Neon Deviance', category: 'Photography', img: 'https://picsum.photos/seed/neon1/800/1000?blur=2', alt: 'High contrast neon portrait' },
+  { id: 2, title: 'Digital Sanctuary', category: 'Digital Art', img: 'https://picsum.photos/seed/cyber2/800/1000?blur=2', alt: 'Abstract digital landscape' },
+  { id: 3, title: 'Transition Echoes', category: 'Photography', img: 'https://picsum.photos/seed/synth3/800/1000?blur=2', alt: 'Soft focus self-portrait' },
+  { id: 4, title: 'Cybernetic Soul', category: 'Mixed Media', img: 'https://picsum.photos/seed/sys4/800/1000?blur=2', alt: 'Glitch art composition' },
 ];
 
 export default function Creations() {
+  const { isLiteMode } = useAccess();
+
   return (
-    <div className="min-h-screen bg-black text-white p-8">
-      {/* Navigation */}
-      <nav className="flex justify-between items-center mb-16 border-b border-magenta-900/50 pb-6">
-        <Link to="/" className="text-magenta-500 hover:text-magenta-400 uppercase tracking-tighter font-bold">
-          ← Back to Hub
-        </Link>
-        <h1 className="text-3xl font-light tracking-[0.2em] uppercase text-center">The Gallery</h1>
-        <div className="w-24"></div>
-      </nav>
-
-      {/* Hero / Call to Action */}
-      <section className="max-w-4xl mx-auto mb-24 text-center">
-        <h2 className="text-5xl font-bold mb-6 italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-magenta-500 to-blue-500">
-          A SHARED SPACE
-        </h2>
-        <p className="text-zinc-400 uppercase tracking-widest text-sm mb-8">
-          The Dollhouse Collective: Writings & Art by the Trans Community
-        </p>
-        <div className="bg-zinc-900/50 border border-magenta-500/30 p-6 rounded-lg">
-          <h3 className="text-magenta-400 font-bold mb-2">CALL FOR CONTRIBUTORS</h3>
-          <p className="text-sm text-zinc-300">
-            Are you a trans creator (MtF or FtM)? We want to showcase your voice. 
-            Whether it's poetry, long-form thoughts, or digital paintings, this space is yours.
+    <Layout>
+      <div className="max-w-6xl w-full">
+        <header className="mb-16 text-center">
+          <h1 className="text-6xl font-black uppercase text-purple-400 drop-shadow-[0_0_15px_rgba(192,132,252,0.3)] tracking-tighter">
+            The Creations
+          </h1>
+          <p className="text-zinc-500 font-mono text-xs tracking-[0.4em] mt-4 uppercase">
+            Visual Narratives • Art & Photography
           </p>
-          <a 
-            href="mailto:sonja@dollhousedeviants.com?subject=Dollhouse%20Deviants%20Contributor%20Submission"
-            className="inline-block mt-4 px-6 py-2 bg-magenta-600 hover:bg-magenta-500 text-white text-xs font-bold uppercase tracking-widest transition-colors"
-          >
-            Submit Your Work
-          </a>
-        </div>
-      </section>
+        </header>
 
-      {/* The Written Word Section */}
-      <section className="max-w-6xl mx-auto mb-24">
-        <h2 className="text-2xl font-bold italic mb-12 border-l-4 border-magenta-600 pl-4 uppercase">The Written Word</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {WRITINGS.map((writing) => (
-            <div key={writing.id} className="border-b border-zinc-800 pb-8 hover:border-magenta-500/50 transition-colors">
-              <span className="text-magenta-500 text-[10px] uppercase tracking-widest">{writing.type}</span>
-              <h3 className="text-2xl font-bold my-2 italic">{writing.title}</h3>
-              <p className="text-zinc-400 italic mb-4">By {writing.author}</p>
-              <p className="text-zinc-300 leading-relaxed mb-6">{writing.excerpt}</p>
-              <button className="text-xs uppercase tracking-widest text-magenta-400 hover:text-magenta-300 font-bold">
-                Read Full Piece →
-              </button>
-            </div>
-          ))}
-        </div>
-      </section>
+        {/* Gallery Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          {artworks.map((work) => (
+            <div key={work.id} className="group relative">
+              <div className={`relative overflow-hidden rounded-3xl bg-zinc-900 aspect-[4/5] border border-zinc-800 transition-all duration-700 ${!isLiteMode && 'group-hover:border-purple-500/50 group-hover:shadow-2xl'}`}>
+                {/* Image Placeholder */}
+                <div className="absolute inset-0 flex items-center justify-center text-zinc-800">
+                  {!isLiteMode ? (
+                    <img 
+                      src={work.img} 
+                      alt={work.alt} 
+                      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center gap-2">
+                      <Camera size={48} />
+                      <span className="text-[10px] uppercase font-mono tracking-widest">[Image Hidden in Lite Mode]</span>
+                    </div>
+                  )}
+                </div>
 
-      {/* Visual Arts Section */}
-      <section className="max-w-6xl mx-auto">
-        <h2 className="text-2xl font-bold italic mb-12 border-l-4 border-blue-600 pl-4 uppercase">Visual Arts</h2>
-        <div className="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
-          {ARTWORK.map((art) => (
-            <div key={art.id} className="relative group overflow-hidden rounded-lg">
-              <SafeImage 
-                src={art.url} 
-                alt={art.title} 
-                className="w-full h-auto grayscale group-hover:grayscale-0 transition-all duration-700"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-end">
-                <span className="text-blue-400 text-xs uppercase font-bold">{art.category}</span>
-                <h3 className="text-lg font-bold italic uppercase">{art.title}</h3>
-                <p className="text-sm text-zinc-400">by {art.artist}</p>
+                {/* Info Overlay */}
+                <div className={`absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-8 flex flex-col justify-end transition-opacity duration-500 ${!isLiteMode ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
+                  <span className="text-purple-400 font-mono text-[10px] uppercase tracking-[0.3em] mb-2">{work.category}</span>
+                  <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-4">{work.title}</h3>
+                  <div className="flex gap-4">
+                    <button className="flex items-center gap-2 text-xs font-bold text-white/70 hover:text-white uppercase tracking-widest transition-colors">
+                      <Info size={14} /> Details
+                    </button>
+                    <button className="flex items-center gap-2 text-xs font-bold text-white/70 hover:text-white uppercase tracking-widest transition-colors">
+                      <ExternalLink size={14} /> Full View
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
         </div>
-      </section>
 
-      <Footer />
-    </div>
+        <section className="mt-24 border-t border-zinc-900 pt-16 flex flex-col items-center">
+          <div className="flex items-center gap-3 mb-6">
+            <Palette className="text-purple-500" size={24} />
+            <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Artist Statement</h2>
+          </div>
+          <p className="max-w-2xl text-center text-zinc-500 leading-relaxed text-lg">
+            This space is a living archive of my journey. Each piece is an attempt to capture the quiet intensity of transition and the vibrant chaos of a neurodivergent mind. Use "Standard Mode" to see full textures, or keep "Lite Mode" active to focus on the narrative.
+          </p>
+        </section>
+      </div>
+    </Layout>
   );
 }

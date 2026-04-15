@@ -1,74 +1,106 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, ShoppingBag, Gem } from 'lucide-react';
-import PayPalButton from '../components/PayPalButton';
-import Footer from '../components/Footer';
-import SafeImage from '../components/SafeImage';
+import Layout from '../components/Layout';
+import { useAccess } from '../context/AccessibilityContext';
+import { ShoppingCart, Download, ShieldCheck, Tag } from 'lucide-react';
 
-const BOUTIQUE_ITEMS = [
-  { id: 1, name: 'Obsidian Choker', price: '$120', image: 'https://images.unsplash.com/photo-1599643478514-4a420804ce68?auto=format&fit=crop&q=80' },
-  { id: 2, name: 'Silver Chain Link', price: '$85', image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80' },
-  { id: 3, name: 'Rose Gold Pendant', price: '$150', image: 'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&q=80' },
-  { id: 4, name: 'Diamond Studs', price: '$295', image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80' },
-  { id: 5, name: 'Pearl Drop Earrings', price: '$110', image: 'https://images.unsplash.com/photo-1535632787350-4e68ef0ac584?auto=format&fit=crop&q=80' },
-  { id: 6, name: 'Gold Cuff Bracelet', price: '$175', image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80' },
+const products = [
+  { 
+    id: 1, 
+    name: 'Deviant Preset Pack V1', 
+    price: '$25', 
+    category: 'Digital Assets',
+    desc: 'Signature neon & high-contrast Lightroom presets for unconventional creators.',
+    tag: 'Best Seller'
+  },
+  { 
+    id: 2, 
+    name: 'The Media Kit Template', 
+    price: '$15', 
+    category: 'Creator Tools',
+    desc: 'A professional, 5-page media kit designed specifically for trans & neurodivergent influencers.',
+    tag: 'New'
+  },
+  { 
+    id: 3, 
+    name: 'Vault Access Pass (Monthly)', 
+    price: '$10', 
+    category: 'Sanctuary Access',
+    desc: 'Unrestricted entry to the 18+ Vault and exclusive social tiers in The Circuit.',
+    tag: 'Subscription'
+  },
+  { 
+    id: 4, 
+    name: 'Dollhouse Brand Assets', 
+    price: '$40', 
+    category: 'Digital Assets',
+    desc: 'The official font pack and SFW logo variations for collaborator use.',
+    tag: null
+  }
 ];
 
 export default function Boutique() {
+  const { isLiteMode } = useAccess();
+
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white font-sans">
-      <header className="sticky top-0 z-50 bg-[#0a0a0a]/90 backdrop-blur-md border-b border-[#2D2D2D]">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#A3A3A3] hover:text-white transition-colors">
-            <ArrowLeft size={16} />
-            Back to Hub
-          </Link>
-          <h1 className="text-2xl font-black uppercase tracking-widest flex items-center gap-2">
-            The <span className="text-[#39FF14]">Boutique</span> <Gem size={20} className="text-[#39FF14]" />
-          </h1>
-          <button className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#39FF14] hover:text-white transition-colors">
-            <ShoppingBag size={16} />
-            Cart (0)
-          </button>
-        </div>
-      </header>
+    <Layout>
+      <div className="max-w-6xl w-full">
+        <header className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+          <div className="text-left">
+            <h1 className="text-6xl font-black uppercase text-green-400 drop-shadow-[0_0_15px_rgba(74,222,128,0.3)] tracking-tighter">
+              The Boutique
+            </h1>
+            <p className="text-zinc-500 font-mono text-xs tracking-[0.4em] mt-2">SUPPORT THE SANCTUARY • DIGITAL GOODS</p>
+          </div>
+          <div className="flex items-center gap-2 text-zinc-400 bg-zinc-900/50 px-4 py-2 rounded-full border border-zinc-800">
+            <ShieldCheck size={16} className="text-green-400" />
+            <span className="text-[10px] font-bold uppercase">Secure Digital Delivery</span>
+          </div>
+        </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-16">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-light tracking-tight mb-4">Exclusive Jewelry Collection</h2>
-          <p className="text-[#A3A3A3] max-w-2xl mx-auto">
-            Handcrafted pieces designed for the bold and the beautiful. 
-            Elevate your aesthetic with our curated selection of high-end accessories.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
-          {BOUTIQUE_ITEMS.map((item) => (
-            <div key={item.id} className="group flex flex-col">
-              <div className="relative aspect-square overflow-hidden bg-[#1A1A1B] border border-[#2D2D2D] mb-4">
-                <SafeImage 
-                  src={item.image} 
-                  alt={item.name}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent opacity-60 pointer-events-none" />
-              </div>
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h3 className="text-sm font-bold uppercase tracking-widest mb-1">{item.name}</h3>
-                  <p className="text-[#A3A3A3] text-xs font-mono">In Stock</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {products.map((product) => (
+            <div 
+              key={product.id}
+              className={`group bg-zinc-900/20 border border-zinc-800 rounded-3xl overflow-hidden flex flex-col transition-all duration-500 ${
+                !isLiteMode && 'hover:border-green-400/30 hover:bg-zinc-900/40 hover:translate-y-[-4px]'
+              }`}
+            >
+              <div className="p-8 flex-grow">
+                <div className="flex justify-between items-start mb-4">
+                  <span className="text-[10px] font-mono text-green-400 uppercase tracking-widest">{product.category}</span>
+                  {product.tag && (
+                    <span className="bg-green-400/10 text-green-400 text-[10px] font-black px-2 py-1 rounded uppercase tracking-tighter">
+                      {product.tag}
+                    </span>
+                  )}
                 </div>
-                <span className="text-[#39FF14] font-mono">{item.price}</span>
+                <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-4 group-hover:text-green-400 transition-colors">
+                  {product.name}
+                </h3>
+                <p className="text-zinc-500 text-sm leading-relaxed mb-6">
+                  {product.desc}
+                </p>
+                <div className="text-4xl font-black text-white tracking-tighter">
+                  {product.price}
+                </div>
               </div>
-              <div className="mt-auto">
-                <PayPalButton price={item.price} itemName={item.name} />
-              </div>
+
+              <button className="w-full bg-zinc-900 border-t border-zinc-800 p-5 flex items-center justify-center gap-3 text-white font-black uppercase tracking-tighter hover:bg-green-500 hover:text-black transition-all">
+                <ShoppingCart size={18} />
+                Add to Cart
+              </button>
             </div>
           ))}
         </div>
-      </main>
-      <Footer />
-    </div>
+
+        <footer className="mt-20 p-10 bg-zinc-900/40 rounded-3xl border border-dashed border-zinc-800 text-center">
+          <Tag className="mx-auto mb-4 text-zinc-700" size={32} />
+          <h4 className="text-white font-black uppercase italic mb-2">Have a custom request?</h4>
+          <p className="text-zinc-500 text-sm max-w-md mx-auto">
+            If you need custom brand assets or a specialized Sanctuary preset, reach out to the Studio directly.
+          </p>
+        </footer>
+      </div>
+    </Layout>
   );
 }

@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAccess } from '../context/AccessibilityContext';
+import { useAuth } from '../context/AuthContext';
 import { Zap, ZapOff } from 'lucide-react';
 
 export default function Footer() {
   const { isLiteMode, toggleLiteMode } = useAccess();
+  const { user, loginWithGoogle, logout } = useAuth();
 
   // 1. Replace 'YOUR_ID_HERE' with the ID you copied from PayPal
   const paypalId = "AZVCASBGAJ8AL"; 
@@ -80,10 +82,16 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-zinc-900 flex flex-col md:flex-row justify-center items-center gap-6">
+      <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-zinc-900 flex flex-col md:flex-row justify-center items-center gap-6 relative">
         <p className="text-[8px] tracking-[0.5em] text-zinc-700 text-center">
           ALL CONTENT © 2026 DOLLHOUSE DEVIANTS PRODUCTIONS • WAVERLY, IA
         </p>
+        <button 
+          onClick={user ? logout : loginWithGoogle} 
+          className="md:absolute md:right-0 text-[10px] text-zinc-600 uppercase hover:text-magenta-500 transition-colors tracking-widest"
+        >
+          {user ? 'Sign Out' : 'Architect Login'}
+        </button>
       </div>
     </footer>
   );

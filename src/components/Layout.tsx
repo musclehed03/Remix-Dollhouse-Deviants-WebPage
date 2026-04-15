@@ -20,7 +20,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }, [isLiteMode]);
 
   return (
-    <div className="min-h-screen bg-[#121212] flex flex-col relative overflow-hidden font-sans selection:bg-magenta-500/30 selection:text-white">
+    <div className="min-h-screen bg-[#121212] flex flex-col relative overflow-x-hidden font-sans selection:bg-magenta-500/30 selection:text-white">
       {/* Slow Load Trigger Banner */}
       {showSlowLoadTrigger && !isLiteMode && (
         <div className="fixed top-0 left-0 w-full z-[10000] bg-zinc-900 border-b border-magenta-500/30 p-3 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in shadow-lg">

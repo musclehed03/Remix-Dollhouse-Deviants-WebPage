@@ -33,7 +33,7 @@ export default function SafeImage({ src, alt, className = '', description, ...pr
   }
 
   return (
-    <div className="relative">
+    <>
       <img 
         src={src} 
         alt={alt} 
@@ -44,7 +44,7 @@ export default function SafeImage({ src, alt, className = '', description, ...pr
       />
       {/* Long description for screen readers only */}
       {description && <p className="sr-only">{description}</p>}
-    </div>
+    </>
   );
 }
 

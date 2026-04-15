@@ -7,12 +7,14 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { AccessibilityProvider } from './context/AccessibilityContext';
-import Home from './pages/Home';
+import Hub from './pages/Hub';
 import SplashScreen from './pages/SplashScreen';
 import SplashGate from './pages/SplashGate';
+import VaultGate from './pages/VaultGate';
 import AdminDashboard from './pages/AdminDashboard';
 import Vault from './pages/Vault';
 import Studio from './pages/Studio';
+import { ProtectedRoute } from './components/ProtectedRoute';
 import Boutique from './pages/Boutique';
 import Creations from './pages/Creations';
 import Circuit from './pages/Circuit';
@@ -36,11 +38,16 @@ export default function App() {
           <TrevorBanner />
           <AccessibilityMenu />
           <Routes>
-          <Route path="/" element={<SplashScreen />} />
-          <Route path="/hub" element={<Home />} />
+          <Route path="/" element={<Hub />} />
+          <Route path="/hub" element={<Hub />} />
           <Route path="/gate" element={<SplashGate />} />
+          <Route path="/vault-gate" element={<VaultGate />} />
           <Route path="/vault" element={<Vault />} />
-          <Route path="/studio" element={<Studio />} />
+          <Route path="/studio" element={
+            <ProtectedRoute>
+              <Studio />
+            </ProtectedRoute>
+          } />
           <Route path="/boutique" element={<Boutique />} />
           <Route path="/creations" element={<Creations />} />
           <Route path="/circuit" element={<Circuit />} />

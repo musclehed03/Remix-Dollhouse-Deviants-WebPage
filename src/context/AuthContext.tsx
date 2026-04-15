@@ -8,8 +8,7 @@ import {
   User 
 } from 'firebase/auth';
 
-const ADMIN_EMAIL = 'musclehed03@gmail.com'; // Change to your actual Google email
-
+const ADMIN_EMAIL = 'musclehed03@gmail.com'; 
 interface AuthContextType {
   user: User | null;
   isAdmin: boolean;
