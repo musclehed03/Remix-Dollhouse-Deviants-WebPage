@@ -1,83 +1,138 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
-import { useAccess } from '../context/AccessibilityContext';
-import { Activity, Database, Terminal, ShieldCheck, Cpu } from 'lucide-react';
+import { Palette, Eye, Maximize2, Camera, Layers } from 'lucide-react';
+import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+
+const galleryCategories = ["All", "Digital Noir", "Sanctuary", "Experimental"];
 
 export default function Studio() {
-  const { isSimplifiedMode } = useAccess();
+  const [filter, setFilter] = useState("All");
+  const [items, setItems] = useState<any[]>([]);
 
-  const logs = [
-    { date: '2026-04-14', event: 'Hub & Boutique wired to production.' },
-    { date: '2026-04-14', event: 'SSL Certificate officially INSTALLED.' },
-    { date: '2026-04-12', event: 'Lite Mode logic integrated into footer.' },
-  ];
+  useEffect(() => {
+    if (!db) return;
+    const q = query(collection(db, "studioItems"), orderBy("createdAt", "desc"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const fetchedItems = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setItems(fetchedItems);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const filteredItems = filter === "All" 
+    ? items 
+    : items.filter(item => item.category === filter);
 
   return (
     <Layout>
-      <div className="max-w-5xl w-full">
-        <header className="mb-12">
-          <h1 className="text-6xl font-black uppercase text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.3)] tracking-tighter">
-            The Studio
-          </h1>
-          <p className="text-zinc-500 font-mono text-xs tracking-[0.4em] mt-2 text-left">SYSTEM DIAGNOSTICS • DEV CONTROL</p>
-        </header>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
-          {/* Health Card */}
-          <div className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-3xl">
-            <div className="flex items-center gap-3 mb-4">
-              <Database className="text-cyan-400" size={20} />
-              <h3 className="text-white font-black uppercase text-sm tracking-widest">Sanctuary Health</h3>
-            </div>
-            <div className="space-y-2">
-              <div className="flex justify-between text-xs">
-                <span className="text-zinc-500">Firebase Hosting:</span>
-                <span className="text-green-500 font-mono">ONLINE</span>
+      <div className="min-h-screen bg-black text-zinc-400 font-sans selection:bg-pink-500/30">
+        
+        {/* --- HERO SECTION --- */}
+        <section className="max-w-7xl mx-auto px-6 pt-32 pb-20">
+          <header className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 border-b border-zinc-900 pb-12">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <Palette className="text-pink-500" size={32} />
+                <span className="text-[10px] uppercase tracking-[0.4em] font-bold text-zinc-600">
+                  Creative Engineering // Studio Floor
+                </span>
               </div>
-              <div className="flex justify-between text-xs">
-                <span className="text-zinc-500">SSL Encryption:</span>
-                <span className="text-green-500 font-mono">ACTIVE</span>
-              </div>
+              <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter italic">
+                Deviant <span className="text-pink-500">Gallery</span>
+              </h1>
             </div>
-          </div>
-
-          {/* Traffic Card */}
-          <div className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-3xl">
-            <div className="flex items-center gap-3 mb-4">
-              <Activity className="text-cyan-400" size={20} />
-              <h3 className="text-white font-black uppercase text-sm tracking-widest">Traffic Pulse</h3>
+            
+            {/* CATEGORY FILTER */}
+            <div className="flex flex-wrap gap-4">
+              {galleryCategories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setFilter(cat)}
+                  className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 border ${
+                    filter === cat 
+                      ? 'bg-pink-600 border-pink-500 text-white shadow-[0_0_15px_rgba(219,39,119,0.3)]' 
+                      : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:border-zinc-600'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
             </div>
-            <p className="text-2xl font-black text-white">124 <span className="text-[10px] text-zinc-500 uppercase tracking-normal">Unique Deviants (24h)</span></p>
-          </div>
+          </header>
 
-          {/* System Card */}
-          <div className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-3xl">
-            <div className="flex items-center gap-3 mb-4">
-              <Cpu className="text-cyan-400" size={20} />
-              <h3 className="text-white font-black uppercase text-sm tracking-widest">Core Status</h3>
-            </div>
-            <p className="text-xs text-zinc-500 leading-relaxed">
-              Environment Variables: <span className="text-cyan-400">LOADED</span><br />
-              Node Version: <span className="text-zinc-300">v20.11.1</span>
-            </p>
-          </div>
-        </div>
-
-        {/* System Log */}
-        <div className="bg-black border border-zinc-800 rounded-3xl overflow-hidden">
-          <div className="bg-zinc-900/50 p-4 border-b border-zinc-800 flex items-center gap-2">
-            <Terminal size={14} className="text-cyan-400" />
-            <span className="text-[10px] font-black uppercase text-zinc-400 tracking-widest">Build History Log</span>
-          </div>
-          <div className="p-6 font-mono text-xs space-y-4">
-            {logs.map((log, i) => (
-              <div key={i} className="flex gap-4">
-                <span className="text-cyan-900">[{log.date}]</span>
-                <span className="text-zinc-400">{log.event}</span>
+          {/* --- THE MASONRY GRID --- */}
+          <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
+            {filteredItems.map((item) => (
+              <div 
+                key={item.id} 
+                className="relative group overflow-hidden rounded-[2rem] border border-zinc-800 bg-zinc-900 transition-all duration-700 hover:border-pink-500/50"
+              >
+                {/* IMAGE RENDERING */}
+                <div className="aspect-[3/4] bg-zinc-800 flex items-center justify-center relative overflow-hidden">
+                  {item.imageUrl ? (
+                    <img 
+                      src={item.imageUrl} 
+                      alt={item.title} 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                  ) : (
+                    <Camera className="text-zinc-700 group-hover:scale-110 transition-transform duration-700" size={48} />
+                  )}
+                  
+                  {/* OVERLAY ON HOVER */}
+                  <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8 backdrop-blur-sm">
+                    <div className="flex items-center gap-2 text-pink-500 text-[10px] font-black uppercase tracking-widest mb-2">
+                      <Layers size={14} />
+                      {item.category}
+                    </div>
+                    <h3 className="text-xl font-bold text-white uppercase italic tracking-tight mb-2">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-zinc-400 mb-6 leading-relaxed italic line-clamp-3">
+                      {item.description}
+                    </p>
+                    <button className="flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-[0.2em] border-t border-zinc-800 pt-4 hover:text-pink-500 transition-colors">
+                      <Maximize2 size={14} />
+                      View High-Res
+                    </button>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
-        </div>
+        </section>
+
+        {/* --- STUDIO STATS / LOGS --- */}
+        <section className="max-w-7xl mx-auto px-6 py-32 border-t border-zinc-900">
+          <div className="grid md:grid-cols-4 gap-12 text-center">
+            <div>
+              <div className="text-4xl font-black text-white italic mb-2 tracking-tighter">24</div>
+              <div className="text-[10px] uppercase tracking-widest text-zinc-600">Active Commissions</div>
+            </div>
+            <div>
+              <div className="text-4xl font-black text-white italic mb-2 tracking-tighter">158</div>
+              <div className="text-[10px] uppercase tracking-widest text-zinc-600">Processed Assets</div>
+            </div>
+            <div>
+              <div className="text-4xl font-black text-white italic mb-2 tracking-tighter">4K</div>
+              <div className="text-[10px] uppercase tracking-widest text-zinc-600">Standard Resolution</div>
+            </div>
+            <div>
+              <div className="text-4xl font-black text-pink-500 italic mb-2 tracking-tighter">100%</div>
+              <div className="text-[10px] uppercase tracking-widest text-zinc-600">Architect Verified</div>
+            </div>
+          </div>
+        </section>
+
+        {/* --- FOOTER MISSION --- */}
+        <footer className="py-20 flex flex-col items-center border-t border-zinc-900 opacity-30 grayscale hover:grayscale-0 transition-all duration-1000">
+           <img src="/dollhouse-sfw-logo.jpg" alt="Dollhouse Deviants" className="h-12 mb-4 opacity-50" />
+           <p className="text-[9px] uppercase tracking-[0.5em]">The Studio // Build Protocol Alpha</p>
+        </footer>
       </div>
     </Layout>
   );

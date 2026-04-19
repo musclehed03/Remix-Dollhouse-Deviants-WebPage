@@ -1,6 +1,7 @@
 import React from 'react';
 import Layout from '../components/Layout';
 import { Book, Lock, Terminal } from 'lucide-react';
+import { FounderSignature } from '../components/FounderSignature';
 
 const journalEntries = [
   {
@@ -32,7 +33,7 @@ const journalEntries = [
 export default function Echoes() {
   return (
     <Layout>
-      <div className="min-h-screen bg-black text-zinc-400 font-mono selection:bg-pink-500/30">
+      <div className="min-h-screen bg-black text-zinc-400 font-mono w-full">
         <div className="max-w-3xl mx-auto px-6 py-32">
           
           <header className="mb-24 border-b border-zinc-900 pb-12">
@@ -47,29 +48,39 @@ export default function Echoes() {
             </p>
           </header>
 
-          <div className="space-y-24">
+          <div className="space-y-32">
             {journalEntries.map((entry) => (
-              <article key={entry.id} className="group relative">
-                <div className="flex items-center gap-4 mb-6">
-                  <span className="text-pink-600 text-[10px] font-bold tracking-widest">{entry.date}</span>
-                  <div className="h-px flex-grow bg-zinc-900 group-hover:bg-pink-900 transition-colors"></div>
-                  <span className={`text-[9px] uppercase tracking-widest ${entry.status === 'Decrypted' ? 'text-zinc-400' : 'text-zinc-700'}`}>
-                    {entry.status}
-                  </span>
+              <article key={entry.id} className="group relative border-l border-zinc-900 pl-10 pb-20">
+                <div className="flex items-center gap-4 mb-8">
+                  <span className="text-pink-600 text-[10px] font-black">{entry.date}</span>
+                  <div className="h-px w-12 bg-zinc-900" />
+                  <span className="text-zinc-700 text-[9px] uppercase tracking-widest">{entry.status}</span>
                 </div>
 
-                <h2 className="text-2xl font-bold text-zinc-200 group-hover:text-white transition-colors mb-6 italic uppercase tracking-tight">
+                <h2 className="text-2xl font-black text-zinc-100 uppercase italic mb-6">
                   {entry.title}
                 </h2>
                 
-                <p className="text-sm leading-relaxed text-zinc-500 group-hover:text-zinc-400 transition-colors mb-8">
-                  {entry.preview}
-                </p>
+                <div className="prose prose-invert max-w-none">
+                  <p className="text-sm leading-relaxed text-zinc-500 group-hover:text-zinc-400 transition-colors">
+                    {entry.preview}
+                  </p>
+                  
+                  {entry.status === 'Decrypted' && (
+                    <div className="mt-12 pt-12 border-t border-zinc-900 animate-in fade-in duration-1000">
+                      <p className="text-zinc-300 italic mb-10">
+                        "The sanctuary is not a place, it is a protocol of being."
+                      </p>
+                      <FounderSignature />
+                    </div>
+                  )}
+                </div>
 
-                <button className="flex items-center gap-2 text-pink-500 text-[10px] font-black uppercase tracking-[0.2em] transition-all group-hover:gap-4">
-                  <Lock size={12} />
-                  {entry.status === 'Encrypted' ? 'Bypass Encryption' : 'Read Full Log'}
-                </button>
+                {entry.status === 'Encrypted' && (
+                  <button className="mt-10 flex items-center gap-3 text-pink-500 text-[10px] font-black uppercase tracking-[0.2em] hover:text-white transition-all">
+                    <Lock size={14} /> Bypass Encryption
+                  </button>
+                )}
               </article>
             ))}
           </div>

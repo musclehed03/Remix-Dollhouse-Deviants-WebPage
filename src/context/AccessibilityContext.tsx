@@ -54,7 +54,9 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
       lightMode, toggleLightMode: () => setLightMode(!lightMode),
       isSimplifiedMode, toggleSimplifiedMode
     }}>
-      {children}
+      <div className={isSimplifiedMode ? 'simplified-mode lite-mode' : 'standard-mode'}>
+        {children}
+      </div>
     </AccessContext.Provider>
   );
 };

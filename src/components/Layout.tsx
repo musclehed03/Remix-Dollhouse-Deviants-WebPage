@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Footer from './Footer';
 import { useAccess } from '../context/AccessibilityContext';
+import { useAuth } from '../context/AuthContext';
 import { Zap } from 'lucide-react';
+import { Nameplate } from './Nameplate';
+import { AccessibilityToggle } from './AccessibilityToggle';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { isSimplifiedMode, toggleSimplifiedMode } = useAccess();
+  const { user: currentUser } = useAuth();
   const [showSlowLoadTrigger, setShowSlowLoadTrigger] = useState(false);
 
   useEffect(() => {
@@ -53,10 +57,50 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Navigation Landmark - Pushed to top left */}
       <nav className="z-20 w-full px-4 sm:px-6 py-6 flex justify-between items-center" aria-label="Main Navigation">
          <a href="/" className="flex items-center gap-3 text-white font-serif tracking-widest text-xl hover:text-magenta-500 transition-colors duration-500">
-           <img src="/DD SFW Logo No Main.jpg" alt="Dollhouse Deviants Logo" className="h-10 w-auto rounded-sm object-contain" />
+           <img src="/dollhouse-sfw-logo.jpg" alt="Dollhouse Deviants Logo" className="h-10 w-auto rounded-sm object-contain" />
            <span className="uppercase font-light">Dollhouse Deviants</span>
          </a>
-         {/* Add any top-right nav links here later */}
+         
+         <div className="flex items-center gap-6">
+           <AccessibilityToggle />
+           
+           {/* INSIDE YOUR PROFILE/NAVBAR SECTION */}
+           {currentUser && (
+             <div className="flex items-center gap-4 pl-6 border-l border-zinc-800">
+               <div className="text-right hidden md:block">
+                 <Nameplate 
+                   name={currentUser.displayName || 'Architect'} 
+                   role={(currentUser as any).role || 'architect'} 
+                   className="text-xs justify-end"
+                 />
+                 <p className="text-[8px] uppercase tracking-[0.3em] text-zinc-600 mt-1">
+                   System Status: Online
+                 </p>
+               </div>
+               
+               {/* Profile Avatar */}
+               <div className="w-10 h-10 rounded-full border border-pink-500/20 flex items-center justify-center text-pink-500 shadow-lg overflow-hidden relative group">
+                 {(currentUser.displayName?.toLowerCase().includes('sonja') || currentUser.email === 'musclehed03@gmail.com') ? (
+                   <>
+                     <img 
+                       src="/gallery/sonja-portrait-noir.jpg" 
+                       alt="Profile Avatar" 
+                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                     />
+                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-pink-500/20 to-transparent h-1 w-full animate-scan-slow pointer-events-none" />
+                   </>
+                 ) : (
+                   <div className="w-full h-full bg-gradient-to-tr from-zinc-800 to-zinc-900 flex items-center justify-center">
+                     <span className="font-black italic">
+                       {(currentUser.displayName || 'S').charAt(0).toUpperCase()}
+                     </span>
+                   </div>
+                 )}
+               </div>
+
+             </div>
+           )}
+         </div>
       </nav>
       
       {/* Main Content Landmark */}

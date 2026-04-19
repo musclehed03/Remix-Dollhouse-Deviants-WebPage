@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { db } from '@/lib/firebase';
-import { doc, setDoc, getDoc, onSnapshot } from 'firebase/firestore';
+import { db, storage } from '@/lib/firebase';
+import { doc, setDoc, getDoc, onSnapshot, collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { Upload, Image as ImageIcon, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import SafeImage from '../components/SafeImage';
 
-type Tab = 'live' | 'schedule' | 'content' | 'socials' | 'webhooks' | 'squircle';
+type Tab = 'live' | 'schedule' | 'content' | 'socials' | 'webhooks' | 'squircle' | 'assets';
 
 export default function AdminDashboard() {
   const { user, isAdmin, loading, loginWithGoogle, logout } = useAuth();
@@ -71,9 +73,10 @@ export default function AdminDashboard() {
           <p className="text-xs text-[#A3A3A3] font-mono mt-1 tracking-widest">SYSTEM ADMIN // MOBILE OPTIMIZED</p>
         </div>
         
-        <nav className="flex md:flex-col overflow-x-auto md:overflow-visible p-4 gap-2 flex-1">
+        <nav className="flex md:flex-col overflow-x-auto md:overflow-visible p-4 gap-2 flex-1 scrollbar-hide">
           <SidebarButton active={activeTab === 'live'} onClick={() => setActiveTab('live')} label="Live Status" />
           <SidebarButton active={activeTab === 'schedule'} onClick={() => setActiveTab('schedule')} label="Weekly Logic" />
+          <SidebarButton active={activeTab === 'assets'} onClick={() => setActiveTab('assets')} label="Deploy Assets" />
           <SidebarButton active={activeTab === 'content'} onClick={() => setActiveTab('content')} label="Content Hub" />
           <SidebarButton active={activeTab === 'socials'} onClick={() => setActiveTab('socials')} label="Brand Socials" />
           <SidebarButton active={activeTab === 'webhooks'} onClick={() => setActiveTab('webhooks')} label="Webhooks" />
@@ -85,10 +88,11 @@ export default function AdminDashboard() {
         </button>
       </aside>
 
-      <main className="flex-1 p-4 md:p-10 overflow-y-auto">
-        <div className="max-w-5xl mx-auto">
+      <main className="flex-1 p-4 md:p-10 overflow-y-auto w-full">
+        <div className="max-w-5xl mx-auto w-full">
           {activeTab === 'live' && <LiveStatusTab />}
           {activeTab === 'schedule' && <WeeklyScheduleTab />}
+          {activeTab === 'assets' && <AssetDeploymentTab />}
           {activeTab === 'content' && <ContentHubTab />}
           {activeTab === 'socials' && <BrandSocialsTab />}
           {activeTab === 'webhooks' && <WebhooksTab />}
@@ -737,6 +741,166 @@ function SquircleLabTab() {
         </div>
       </div>
       <canvas ref={canvasRef} className="hidden" />
+    </div>
+  );
+}
+
+function AssetDeploymentTab() {
+  const { user } = useAuth();
+  const [uploading, setUploading] = useState(false);
+  const [status, setStatus] = useState<{ type: 'success' | 'error', msg: string } | null>(null);
+
+  // Form State
+  const [formData, setFormData] = useState({
+    title: '',
+    category: 'Digital Noir',
+    description: '',
+    target: 'Studio' // Studio or Vault
+  });
+  const [file, setFile] = useState<File | null>(null);
+
+  const handleUpload = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!file || !storage) {
+      if (!storage) setStatus({ type: 'error', msg: 'System Error: Storage offline.' });
+      return;
+    }
+
+    setUploading(true);
+    setStatus(null);
+
+    try {
+      // 1. Upload to Firebase Storage
+      const storageRef = ref(storage, `gallery/${Date.now()}_${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+
+      // 2. Save Metadata to Firestore
+      const collectionName = formData.target === 'Vault' ? 'vaultItems' : 'studioItems';
+      await addDoc(collection(db, collectionName), {
+        title: formData.title,
+        category: formData.category,
+        description: formData.description,
+        imageUrl: downloadURL,
+        createdAt: serverTimestamp(),
+        authorId: user?.uid
+      });
+
+      setStatus({ type: 'success', msg: 'Asset successfully deployed to the Sanctuary.' });
+      setFormData({ title: '', category: 'Digital Noir', description: '', target: 'Studio' });
+      setFile(null);
+    } catch (error) {
+      console.error(error);
+      setStatus({ type: 'error', msg: 'Upload failed. Check system logs.' });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div className="animate-fade-in space-y-8 w-full max-w-4xl mx-auto">
+      <header className="border-b border-[#2D2D2D] pb-4">
+        <h2 className="text-3xl font-black uppercase tracking-widest text-[#E5E5E5]">
+          Asset <span className="text-[#FF69B4]">Deployment</span>
+        </h2>
+        <p className="text-xs text-[#A3A3A3] mt-2 uppercase tracking-[0.3em]">
+          Central Command // Direct Override Protocol
+        </p>
+      </header>
+
+      <form onSubmit={handleUpload} className="grid md:grid-cols-2 gap-8 md:gap-12">
+        {/* LEFT: FILE UPLOAD */}
+        <div className="space-y-6">
+          <label className="block group cursor-pointer h-full">
+            <div className="h-full min-h-[300px] bg-[#1A1A1B] border-2 border-dashed border-[#2D2D2D] rounded-[2rem] flex flex-col items-center justify-center group-hover:border-[#FF69B4]/50 transition-all overflow-hidden relative shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
+              {file ? (
+                <div className="text-center p-4">
+                  <ImageIcon className="mx-auto text-[#FF69B4] mb-2" size={32} />
+                  <p className="text-xs text-white font-bold truncate max-w-[200px]">{file.name}</p>
+                </div>
+              ) : (
+                <>
+                  <Upload className="text-[#A3A3A3] mb-4 group-hover:text-[#FF69B4] transition-colors duration-500" size={48} />
+                  <span className="text-[10px] uppercase font-bold tracking-widest text-[#A3A3A3]">Drop Asset Here</span>
+                </>
+              )}
+            </div>
+            <input 
+              type="file" 
+              className="hidden" 
+              accept="image/*" 
+              onChange={(e) => setFile(e.target.files?.[0] || null)} 
+            />
+          </label>
+        </div>
+
+        {/* RIGHT: METADATA */}
+        <div className="space-y-6 bg-[#1A1A1B] border border-[#2D2D2D] p-6 lg:p-8 rounded-[2rem]">
+          <div className="space-y-2">
+            <label className="text-[10px] uppercase font-bold tracking-widest text-[#A3A3A3] ml-2">Deployment Target</label>
+            <select 
+              className="w-full bg-[#0a0a0a] border border-[#2D2D2D] rounded-xl px-4 py-4 text-white focus:outline-none focus:border-[#FF69B4] shadow-inner font-mono text-sm"
+              value={formData.target}
+              onChange={(e) => setFormData({...formData, target: e.target.value})}
+            >
+              <option value="Studio">The Studio (SFW Gallery)</option>
+              <option value="Vault">The Vault (18+ Content)</option>
+            </select>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[10px] uppercase font-bold tracking-widest text-[#A3A3A3] ml-2">Asset Title</label>
+            <input 
+              type="text" 
+              placeholder="e.g. Waverly Shadows"
+              className="w-full bg-[#0a0a0a] border border-[#2D2D2D] rounded-xl px-4 py-4 text-white focus:outline-none focus:border-[#FF69B4] font-mono text-sm shadow-inner"
+              value={formData.title}
+              onChange={(e) => setFormData({...formData, title: e.target.value})}
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[10px] uppercase font-bold tracking-widest text-[#A3A3A3] ml-2">Category (Studio Only)</label>
+            <input 
+              type="text" 
+              placeholder="e.g. Digital Noir"
+              className="w-full bg-[#0a0a0a] border border-[#2D2D2D] rounded-xl px-4 py-4 text-white focus:outline-none focus:border-[#FF69B4] font-mono text-sm shadow-inner"
+              value={formData.category}
+              onChange={(e) => setFormData({...formData, category: e.target.value})}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[10px] uppercase font-bold tracking-widest text-[#A3A3A3] ml-2">Description</label>
+            <textarea 
+              rows={3}
+              placeholder="Technical notes or vibe description..."
+              className="w-full bg-[#0a0a0a] border border-[#2D2D2D] rounded-xl px-4 py-4 text-white focus:outline-none focus:border-[#FF69B4] resize-none font-mono text-sm shadow-inner"
+              value={formData.description}
+              onChange={(e) => setFormData({...formData, description: e.target.value})}
+            />
+          </div>
+
+          {status && (
+            <div className={`p-4 rounded-xl flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest ${
+              status.type === 'success' ? 'bg-[#00ff9d]/10 text-[#00ff9d] border border-[#00ff9d]/30' : 'bg-red-500/10 text-red-500 border border-red-500/30'
+            }`}>
+              {status.type === 'success' ? <CheckCircle size={16} /> : <AlertCircle size={16} />}
+              {status.msg}
+            </div>
+          )}
+
+          <button 
+            type="submit" 
+            disabled={uploading || !file}
+            className="w-full bg-transparent border-2 border-[#FF69B4] text-[#FF69B4] hover:bg-[#FF69B4] hover:text-[#0a0a0a] text-[10px] font-black py-5 rounded-xl uppercase tracking-[0.3em] transition-all duration-300 shadow-[0_0_15px_rgba(255,105,180,0.3)] hover:shadow-[0_0_25px_rgba(255,105,180,0.6)] disabled:opacity-50 flex justify-center items-center gap-2 mt-4"
+          >
+            {uploading ? <Loader2 className="animate-spin" size={16} /> : <Upload size={16} />}
+            {uploading ? 'Deploying...' : 'Deploy to Sanctuary'}
+          </button>
+        </div>
+      </form>
     </div>
   );
 }

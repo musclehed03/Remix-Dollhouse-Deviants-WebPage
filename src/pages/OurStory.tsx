@@ -1,6 +1,7 @@
 import React from 'react';
 import Layout from '../components/Layout';
 import { Heart, ShieldCheck, Sparkles } from 'lucide-react';
+import { FounderSignature } from '../components/FounderSignature';
 
 export default function OurStory() {
   return (
@@ -20,9 +21,7 @@ export default function OurStory() {
 
         <div className="mt-20 pt-10 border-t border-zinc-900">
           <p className="text-zinc-600 font-mono text-[10px] uppercase tracking-widest mb-4">With love and radical empathy,</p>
-          <p className="signature-font text-6xl text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.3)]">
-                -Sonja Kelley
-          </p>
+          <FounderSignature />
         </div>
       </div>
     </Layout>

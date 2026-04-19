@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
+import { FounderSignature } from '../components/FounderSignature';
 
 export default function About() {
   return (
@@ -53,6 +54,10 @@ export default function About() {
               I decided to stop running from the labels. I decided to own them. Today, 'Deviant' 
               is my liberation. The Dollhouse is my sanctuary.
             </p>
+          </div>
+          
+          <div className="flex justify-end pt-8">
+             <FounderSignature />
           </div>
         </div>
       </section>

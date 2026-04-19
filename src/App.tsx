@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { AccessibilityProvider } from './context/AccessibilityContext';
@@ -30,10 +30,23 @@ import UserProfile from './pages/UserProfile';
 import TrevorBanner from './components/TrevorBanner';
 import AccessibilityMenu from './components/AccessibilityMenu';
 import ScrollToTop from './components/ScrollToTop';
+import LoadingScreen from './components/LoadingScreen';
+import SensoryAdvisory from './components/SensoryAdvisory';
 
 export default function App() {
+  const [appReady, setAppReady] = useState(false);
+
+  useEffect(() => {
+    // Artificial delay to let the cinematic finish (2.5 seconds)
+    const timer = setTimeout(() => setAppReady(true), 2500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!appReady) return <LoadingScreen />;
+
   return (
     <AccessibilityProvider>
+      <SensoryAdvisory />
       <AuthProvider>
         <Router>
           <ScrollToTop />

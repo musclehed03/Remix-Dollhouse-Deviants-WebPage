@@ -1,6 +1,7 @@
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { getAuth, Auth } from 'firebase/auth';
 import { getFirestore, Firestore } from 'firebase/firestore';
+import { getStorage, FirebaseStorage } from 'firebase/storage';
 
 const stripQuotes = (str: string | undefined) => {
   if (!str) return str;
@@ -23,12 +24,14 @@ const isFirebaseConfigured = Boolean(firebaseConfig.apiKey);
 let app: FirebaseApp | undefined;
 let auth: Auth | undefined;
 let db: Firestore | undefined;
+let storage: FirebaseStorage | undefined;
 
 if (isFirebaseConfigured) {
   try {
     app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
     auth = getAuth(app);
     db = getFirestore(app);
+    storage = getStorage(app);
   } catch (error) {
     console.error("Failed to initialize Firebase:", error);
   }
@@ -36,4 +39,4 @@ if (isFirebaseConfigured) {
   console.warn("Firebase is not configured. Please set NEXT_PUBLIC_FIREBASE_API_KEY and other environment variables.");
 }
 
-export { app, auth, db, isFirebaseConfigured };
+export { app, auth, db, storage, isFirebaseConfigured };

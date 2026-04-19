@@ -79,6 +79,17 @@ body {
   animation: fade-in 0.4s ease-out forwards;
 }
 
+/* scan-slow animation globally available for Custom Avatars */
+@keyframes scan-slow {
+  0% { top: 0%; opacity: 0; }
+  50% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+.animate-scan-slow {
+  position: absolute;
+  animation: scan-slow 10s infinite linear;
+}
+
 @keyframes pulse-neon {
   0%, 100% {
     box-shadow: 0 0 15px rgba(255, 30, 137, 0.4);
