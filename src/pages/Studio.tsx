@@ -4,7 +4,7 @@ import { useAccess } from '../context/AccessibilityContext';
 import { Activity, Database, Terminal, ShieldCheck, Cpu } from 'lucide-react';
 
 export default function Studio() {
-  const { isLiteMode } = useAccess();
+  const { isSimplifiedMode } = useAccess();
 
   const logs = [
     { date: '2026-04-14', event: 'Hub & Boutique wired to production.' },

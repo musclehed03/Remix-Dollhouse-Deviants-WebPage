@@ -5,7 +5,7 @@ import { useAccess } from '../context/AccessibilityContext';
 const SplashScreen = () => {
   const [email, setEmail] = useState('');
   // Pulled from your AccessibilityContext!
-  const { isLiteMode, toggleLiteMode } = useAccess(); 
+  const { isSimplifiedMode, toggleSimplifiedMode } = useAccess(); 
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,7 +19,7 @@ const SplashScreen = () => {
     <div className="relative min-h-screen w-full bg-[#050505] overflow-hidden flex flex-col items-center justify-center font-sans">
       
       {/* BACKGROUND LAYER: The Neon Kitty Curtain */}
-      {!isLiteMode && (
+      {!isSimplifiedMode && (
         <div className="absolute inset-0 pointer-events-none opacity-20">
           {/* Placeholder Kitties - scattered across the background */}
           <Cat className="absolute top-10 left-[10%] w-16 h-16 text-pink-500 drop-shadow-[0_0_8px_rgba(236,72,153,0.8)] -rotate-12" />
@@ -34,7 +34,7 @@ const SplashScreen = () => {
       <div className="relative z-10 flex flex-col items-center gap-6 px-4 max-w-5xl w-full mt-8">
         
         {/* Headline */}
-        <h1 className={`text-5xl md:text-7xl font-black uppercase tracking-widest text-center ${isLiteMode ? 'text-pink-500' : 'text-pink-300 drop-shadow-[0_0_20px_rgba(255,105,180,1)]'}`}>
+        <h1 className={`text-5xl md:text-7xl font-black uppercase tracking-widest text-center ${isSimplifiedMode ? 'text-pink-500' : 'text-pink-300 drop-shadow-[0_0_20px_rgba(255,105,180,1)]'}`}>
           Coming Soon
         </h1>
 
@@ -43,12 +43,12 @@ const SplashScreen = () => {
           <img
             src="/DD SFW Logo No Main.jpg" 
             alt="Dollhouse Deviants Neon House Logo"
-            className={`w-full h-auto ${isLiteMode ? '' : 'drop-shadow-[0_0_25px_rgba(255,20,147,0.4)]'}`}
+            className={`w-full h-auto ${isSimplifiedMode ? '' : 'drop-shadow-[0_0_25px_rgba(255,20,147,0.4)]'}`}
           />
         </div>
 
         {/* URL */}
-        <h2 className={`text-2xl md:text-4xl font-bold tracking-wider text-center mt-4 ${isLiteMode ? 'text-white' : 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]'}`}>
+        <h2 className={`text-2xl md:text-4xl font-bold tracking-wider text-center mt-4 ${isSimplifiedMode ? 'text-white' : 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]'}`}>
           DOLLHOUSEDEVIANTS.COM
         </h2>
 
@@ -62,7 +62,7 @@ const SplashScreen = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               required
-              className={`w-full bg-black/60 border border-pink-500/50 rounded-full py-3 pl-6 pr-32 text-white placeholder-zinc-500 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 ${isLiteMode ? '' : 'backdrop-blur-md'}`}
+              className={`w-full bg-black/60 border border-pink-500/50 rounded-full py-3 pl-6 pr-32 text-white placeholder-zinc-500 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 ${isSimplifiedMode ? '' : 'backdrop-blur-md'}`}
             />
             <button
               type="submit"
@@ -78,14 +78,14 @@ const SplashScreen = () => {
       {/* LITE MODE TOGGLE (Bottom Right) */}
       <div className="absolute bottom-6 right-6 z-20">
         <button
-          onClick={toggleLiteMode}
+          onClick={toggleSimplifiedMode}
           className="flex items-center gap-3 bg-black/60 border border-zinc-700 hover:border-pink-500 rounded-full px-4 py-2 transition-all backdrop-blur-md cursor-pointer"
         >
-          <div className={`w-10 h-6 rounded-full p-1 transition-colors ${isLiteMode ? 'bg-white' : 'bg-zinc-800'}`}>
-            <div className={`w-4 h-4 rounded-full transition-transform ${isLiteMode ? 'translate-x-4 bg-black' : 'translate-x-0 bg-white'}`} />
+          <div className={`w-10 h-6 rounded-full p-1 transition-colors ${isSimplifiedMode ? 'bg-white' : 'bg-zinc-800'}`}>
+            <div className={`w-4 h-4 rounded-full transition-transform ${isSimplifiedMode ? 'translate-x-4 bg-black' : 'translate-x-0 bg-white'}`} />
           </div>
           <div className="flex flex-col text-left">
-            <span className="text-[10px] text-white font-bold uppercase tracking-wider leading-tight">Lite Mode</span>
+            <span className="text-[10px] text-white font-bold uppercase tracking-wider leading-tight">Simplified View</span>
             <span className="text-[9px] text-zinc-400 uppercase tracking-widest leading-tight">(Data Saving)</span>
           </div>
         </button>

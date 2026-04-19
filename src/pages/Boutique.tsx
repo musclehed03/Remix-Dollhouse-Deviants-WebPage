@@ -1,105 +1,76 @@
 import React from 'react';
 import Layout from '../components/Layout';
-import { useAccess } from '../context/AccessibilityContext';
-import { ShoppingCart, Download, ShieldCheck, Tag } from 'lucide-react';
+import { ShoppingBag, Mail, Zap, Monitor, Sliders } from 'lucide-react';
 
-const products = [
+const boutiqueItems = [
   { 
-    id: 1, 
-    name: 'Deviant Preset Pack V1', 
-    price: '$25', 
-    category: 'Digital Assets',
-    desc: 'Signature neon & high-contrast Lightroom presets for unconventional creators.',
-    tag: 'Best Seller'
+    id: "bp-01", 
+    name: "Architect Noir Preset", 
+    price: "15.00", 
+    icon: <Sliders size={24} />,
+    category: "Editing", 
+    desc: "The signature low-light, high-contrast look used across the Dollhouse Deviants visuals. Perfect for industrial or noir-style portraits." 
   },
   { 
-    id: 2, 
-    name: 'The Media Kit Template', 
-    price: '$15', 
-    category: 'Creator Tools',
-    desc: 'A professional, 5-page media kit designed specifically for trans & neurodivergent influencers.',
-    tag: 'New'
+    id: "bp-02", 
+    name: "Sanctuary Stream Kit", 
+    price: "35.00", 
+    icon: <Monitor size={24} />,
+    category: "Assets", 
+    desc: "Complete OBS/Stream package including neon borders, 'Stealth Mode' overlays, and custom transitional graphics." 
   },
   { 
-    id: 3, 
-    name: 'Vault Access Pass (Monthly)', 
-    price: '$10', 
-    category: 'Sanctuary Access',
-    desc: 'Unrestricted entry to the 18+ Vault and exclusive social tiers in The Circuit.',
-    tag: 'Subscription'
-  },
-  { 
-    id: 4, 
-    name: 'Dollhouse Brand Assets', 
-    price: '$40', 
-    category: 'Digital Assets',
-    desc: 'The official font pack and SFW logo variations for collaborator use.',
-    tag: null
+    id: "bp-03", 
+    name: "Waverly Audio Archive", 
+    price: "20.00", 
+    icon: <Zap size={24} />,
+    category: "Sound", 
+    desc: "A collection of 10 ambient, industrial lo-fi tracks specifically composed for background use in private galleries." 
   }
 ];
 
 export default function Boutique() {
-  const { isLiteMode } = useAccess();
-
   return (
     <Layout>
-      <div className="max-w-6xl w-full">
-        <header className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-          <div className="text-left">
-            <h1 className="text-6xl font-black uppercase text-green-400 drop-shadow-[0_0_15px_rgba(74,222,128,0.3)] tracking-tighter">
-              The Boutique
+      <div className="min-h-screen bg-black text-zinc-400 font-sans">
+        <div className="max-w-7xl mx-auto px-6 py-32">
+          
+          <header className="mb-24 border-l-4 border-pink-600 pl-8">
+            <h1 className="text-6xl font-black text-white uppercase tracking-tighter italic mb-4">
+              The <span className="text-pink-500">Boutique</span>
             </h1>
-            <p className="text-zinc-500 font-mono text-xs tracking-[0.4em] mt-2">SUPPORT THE SANCTUARY • DIGITAL GOODS</p>
-          </div>
-          <div className="flex items-center gap-2 text-zinc-400 bg-zinc-900/50 px-4 py-2 rounded-full border border-zinc-800">
-            <ShieldCheck size={16} className="text-green-400" />
-            <span className="text-[10px] font-bold uppercase">Secure Digital Delivery</span>
-          </div>
-        </header>
+            <p className="text-zinc-500 max-w-xl italic text-lg leading-relaxed">
+              Professional tools for unconventional creators. Procure the digital assets used to engineer the Sanctuary.
+            </p>
+          </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {products.map((product) => (
-            <div 
-              key={product.id}
-              className={`group bg-zinc-900/20 border border-zinc-800 rounded-3xl overflow-hidden flex flex-col transition-all duration-500 ${
-                !isLiteMode && 'hover:border-green-400/30 hover:bg-zinc-900/40 hover:translate-y-[-4px]'
-              }`}
-            >
-              <div className="p-8 flex-grow">
-                <div className="flex justify-between items-start mb-4">
-                  <span className="text-[10px] font-mono text-green-400 uppercase tracking-widest">{product.category}</span>
-                  {product.tag && (
-                    <span className="bg-green-400/10 text-green-400 text-[10px] font-black px-2 py-1 rounded uppercase tracking-tighter">
-                      {product.tag}
-                    </span>
-                  )}
+          <div className="grid lg:grid-cols-3 gap-12">
+            {boutiqueItems.map((item) => (
+              <div key={item.id} className="bg-zinc-900/20 border border-zinc-800 rounded-[3rem] p-12 flex flex-col hover:border-pink-500/50 transition-all duration-700 group relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 text-zinc-800 group-hover:text-pink-600/20 transition-colors">
+                  <ShoppingBag size={80} strokeWidth={1} />
                 </div>
-                <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-4 group-hover:text-green-400 transition-colors">
-                  {product.name}
-                </h3>
-                <p className="text-zinc-500 text-sm leading-relaxed mb-6">
-                  {product.desc}
-                </p>
-                <div className="text-4xl font-black text-white tracking-tighter">
-                  {product.price}
+
+                <div className="mb-8 w-14 h-14 bg-zinc-900 border border-zinc-800 rounded-2xl flex items-center justify-center text-pink-500 shadow-xl group-hover:shadow-pink-500/10 transition-all">
+                  {item.icon}
+                </div>
+                
+                <h3 className="text-2xl font-black text-white uppercase italic tracking-tight mb-4">{item.name}</h3>
+                <p className="text-xs text-zinc-500 leading-relaxed mb-10">{item.desc}</p>
+                
+                <div className="mt-auto pt-8 border-t border-zinc-800 flex items-center justify-between">
+                  <div className="text-3xl font-black text-white italic tracking-tighter">${item.price}</div>
+                  <a 
+                    href={`mailto:sonja-on-fire@dollhousedeviants.com?subject=Boutique Procurement Request: ${item.name}`}
+                    className="bg-pink-600 hover:bg-white hover:text-black text-white px-8 py-4 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 shadow-lg shadow-pink-900/20"
+                  >
+                    Procure Asset
+                  </a>
                 </div>
               </div>
-
-              <button className="w-full bg-zinc-900 border-t border-zinc-800 p-5 flex items-center justify-center gap-3 text-white font-black uppercase tracking-tighter hover:bg-green-500 hover:text-black transition-all">
-                <ShoppingCart size={18} />
-                Add to Cart
-              </button>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-
-        <footer className="mt-20 p-10 bg-zinc-900/40 rounded-3xl border border-dashed border-zinc-800 text-center">
-          <Tag className="mx-auto mb-4 text-zinc-700" size={32} />
-          <h4 className="text-white font-black uppercase italic mb-2">Have a custom request?</h4>
-          <p className="text-zinc-500 text-sm max-w-md mx-auto">
-            If you need custom brand assets or a specialized Sanctuary preset, reach out to the Studio directly.
-          </p>
-        </footer>
       </div>
     </Layout>
   );

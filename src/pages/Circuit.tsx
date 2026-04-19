@@ -2,105 +2,181 @@ import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import { useAuth } from '../context/AuthContext';
 import { useAccess } from '../context/AccessibilityContext';
-import { Radio, Image as ImageIcon, Send, ShieldCheck, EyeOff, Eye } from 'lucide-react';
+import { Radio, Image as ImageIcon, Send, ShieldCheck, EyeOff, Eye, AlertTriangle } from 'lucide-react';
 
 export default function Circuit() {
-  const { user, isAdmin } = useAuth();
-  const { isLiteMode } = useAccess();
-  const [isStaticFilterActive, setIsStaticFilterActive] = useState(false);
+  const { user } = useAuth();
+  const { isSimplifiedMode } = useAccess();
   const [postContent, setPostContent] = useState('');
   const [altText, setAltText] = useState('');
 
-  // Mock Feed Data
+  // The Feed with your new Developer Log
   const [posts, setPosts] = useState([
-    { id: 1, author: "Sonja", content: "Welcome to the first transmission on The Circuit. This is our space.", image: "https://picsum.photos/seed/circuit/800/600?blur=2", alt: "A vibrant neon sign that says 'Open' in a dark alley.", timestamp: "2h ago" },
-    { id: 2, author: "Deviant_01", content: "Feeling safe here. Thank you for building this, Architect.", image: null, alt: "", timestamp: "5h ago" }
+    {
+      id: "arch-001",
+      author: "The Architect",
+      role: "Founder",
+      isStaff: true,
+      timestamp: "Entry: 04.18.2026",
+      content: `The heavy doors of the Dollhouse are finally open. \n\nThis sanctuary was built out of a necessity for autonomy. In a world that seeks to commodify, judge, or restrict the unconventional, we have created a digital black-site where the rules are written by us. \n\nWhether you are here for the art in the Gallery, the raw energy of the Boutique, or the guarded secrets within the Vault—know that you are in a space defined by absolute consent and unwavering security. \n\nWe don't just host content; we protect the creators and the community that makes this possible. Welcome to the new standard. \n\nStay deviant.\n— Sonja`,
+      tags: ["Manifesto", "SanctuaryProtocol", "ArchitectLog"],
+      isPinned: true,
+      image: null,
+      alt: ""
+    },
+    { 
+      id: 3, 
+      author: "Sonja (Architect)", 
+      isStaff: true,
+      content: "Architect Log // Update 01: The sanctuary just got a little clearer. We've officially transitioned 'Lite Mode' to 'Simplified View' to better support our screen-reader family. I've also wired in a Sensory Advisory for The Circuit—safety first, always. 🏳️⚧️✨", 
+      image: null, 
+      alt: "", 
+      timestamp: "Just now" 
+    },
+    { 
+      id: 1, 
+      author: "Sonja", 
+      isStaff: true,
+      content: "Welcome to the first transmission on The Circuit. This is our space.", 
+      image: "https://picsum.photos/seed/circuit/800/600?blur=2", 
+      alt: "A vibrant neon sign that says 'Open' in a dark alley.", 
+      timestamp: "2h ago" 
+    },
+    { 
+      id: 2, 
+      author: "Deviant_01", 
+      isStaff: false,
+      content: "Feeling safe here. Thank you for building this, Architect.", 
+      image: null, 
+      alt: "", 
+      timestamp: "5h ago" 
+    }
   ]);
-
-  const handlePost = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!postContent || (postContent && !altText && !isLiteMode)) return;
-    const newPost = { id: Date.now(), author: user?.displayName || "Anonymous Deviant", content: postContent, image: null, alt: altText, timestamp: "Just now" };
-    setPosts([newPost, ...posts]);
-    setPostContent('');
-    setAltText('');
-  };
 
   return (
     <Layout>
-      <div className="max-w-4xl w-full mx-auto">
-        <header className="mb-12 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="text-center md:text-left">
-            <h1 className="text-6xl font-black uppercase text-[#FF5F1F] drop-shadow-[0_0_15px_rgba(255,95,31,0.3)] tracking-tighter">
-              The Circuit
-            </h1>
-            <p className="text-zinc-500 font-mono text-xs tracking-[0.4em] mt-2 uppercase">Community Live Wire</p>
-          </div>
-          <button onClick={() => setIsStaticFilterActive(!isStaticFilterActive)} className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all text-[10px] font-black uppercase tracking-widest ${ isStaticFilterActive ? 'bg-[#FF5F1F] border-[#FF5F1F] text-black' : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:text-white' }`} >
-            {isStaticFilterActive ? <EyeOff size={14} /> : <Eye size={14} />}
-            {isStaticFilterActive ? 'Static Filter: ON' : 'Static Filter: OFF'}
-          </button>
-        </header>
-
-        {/* POSTING BOX */}
-        {user ? (
-          <div className="mb-12 p-6 bg-zinc-900/40 border border-zinc-800 rounded-3xl">
-            <form onSubmit={handlePost} className="space-y-4">
-              <textarea placeholder="Broadcast to the sanctuary..." value={postContent} onChange={(e) => setPostContent(e.target.value)} className="w-full bg-black/50 border border-zinc-800 p-4 rounded-2xl text-white outline-none focus:border-[#FF5F1F] transition-all resize-none" />
-              <div className="flex flex-col md:flex-row gap-4 items-center">
-                <div className="flex-grow w-full">
-                  <input type="text" placeholder="Image Alt-Text (Required for accessibility)..." value={altText} onChange={(e) => setAltText(e.target.value)} className="w-full bg-black/50 border border-zinc-800 p-3 rounded-xl text-xs text-zinc-400 outline-none focus:border-cyan-500 transition-all" />
-                </div>
-                <button type="submit" disabled={!postContent || (!altText && !isLiteMode)} className="w-full md:w-auto bg-[#FF5F1F] disabled:opacity-30 text-black px-8 py-3 rounded-xl font-black uppercase tracking-tighter hover:bg-orange-400 transition-all flex items-center justify-center gap-2" >
-                  <Send size={18} /> Transmit
-                </button>
-              </div>
-            </form>
-          </div>
-        ) : (
-          <div className="mb-12 p-6 bg-zinc-900/20 border border-dashed border-zinc-800 rounded-3xl text-center">
-            <p className="text-zinc-600 font-mono text-[10px] uppercase tracking-[0.2em]">Login as a Deviant to join the transmission</p>
+      <div className="max-w-4xl w-full mx-auto pb-20 pt-10 px-4">
+        
+        {/* Sensory Advisory */}
+        {!isSimplifiedMode && (
+          <div className="mb-12 p-6 bg-orange-500/10 border border-orange-500/20 rounded-2xl flex items-center gap-6 animate-in fade-in slide-in-from-top-4 duration-700">
+            <div className="p-3 bg-orange-500/20 rounded-full text-orange-400">
+              <AlertTriangle size={24} />
+            </div>
+            <div>
+              <h4 className="text-white font-black uppercase tracking-widest text-xs mb-1">Sensory Advisory</h4>
+              <p className="text-zinc-400 text-sm">This feed contains raw media. Enable <span className="text-orange-400 font-bold">Simplified View</span> to minimize visual density.</p>
+            </div>
           </div>
         )}
 
-        {/* FEED */}
-        <div className="space-y-10">
+        <header className="mb-12 flex items-center gap-4">
+          <Radio className="text-[#FF5F1F]" size={32} />
+          <h1 className="text-5xl font-black uppercase text-white tracking-tighter">The Circuit</h1>
+        </header>
+
+        {/* --- ADMIN QUICK LINKS --- */}
+        {user?.email === "musclehed03@gmail.com" && (
+          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mb-8">
+            <h3 className="text-pink-500 text-[10px] uppercase tracking-widest font-black mb-4">
+              System Administration
+            </h3>
+            <div className="flex flex-wrap gap-4">
+              {/* NEW COMPLIANCE QUICK LINK */}
+              <a 
+                href="/compliance" 
+                className="flex items-center gap-3 bg-zinc-800 hover:bg-zinc-700 text-white px-5 py-3 rounded-xl transition-all border border-zinc-700 group"
+              >
+                <div className="p-2 bg-pink-600/10 rounded-lg group-hover:bg-pink-600/20">
+                  <ShieldCheck size={18} className="text-pink-500" />
+                </div>
+                <div className="text-left">
+                  <p className="text-[10px] uppercase font-bold tracking-tight">Legal Audit</p>
+                  <p className="text-[9px] text-zinc-500">View 2257 & Safety Records</p>
+                </div>
+              </a>
+
+              {/* OTHER ADMIN ACTIONS... */}
+              <button className="bg-zinc-800 px-5 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest text-zinc-400">
+                Manage Vault Items
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Post Composer */}
+        <div className="mb-12 bg-zinc-900/50 border border-zinc-800 rounded-[2rem] p-6 shadow-2xl">
+          <textarea 
+            value={postContent}
+            onChange={(e) => setPostContent(e.target.value)}
+            placeholder="Transmit a thought to the sanctuary..."
+            className="w-full bg-transparent border-none text-white placeholder-zinc-700 resize-none focus:ring-0 text-lg mb-4"
+            rows={3}
+          />
+          <div className="flex items-center justify-between pt-4 border-t border-zinc-800/50">
+            <button className="text-zinc-500 hover:text-cyan-400 transition-colors flex items-center gap-2 text-xs font-mono uppercase tracking-widest">
+              <ImageIcon size={18} />
+              Add Image
+            </button>
+            <button className="bg-[#FF5F1F] text-white px-8 py-3 rounded-xl font-black uppercase tracking-tighter flex items-center gap-2 hover:bg-white hover:text-black transition-all">
+              Transmit
+              <Send size={16} />
+            </button>
+          </div>
+        </div>
+
+        {/* The Feed */}
+        <div className="space-y-8">
           {posts.map((post) => (
-            <article key={post.id} className="group">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center font-black text-[#FF5F1F]">
-                  {post.author[0]}
+            <div key={post.id} className={`bg-zinc-900/20 border ${post.isPinned ? 'border-pink-500/50 shadow-[0_0_30px_rgba(255,105,180,0.1)]' : 'border-zinc-800/50'} rounded-3xl p-8 transition-all hover:border-zinc-700 relative`}>
+              {post.isPinned && (
+                <div className="absolute -top-3 -right-3 bg-pink-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1 rounded-full shadow-lg border border-pink-400">
+                  Pinned Transmission
                 </div>
-                <div>
-                  <h4 className="text-white font-bold text-sm tracking-tight">{post.author}</h4>
-                  <p className="text-[10px] text-zinc-600 font-mono uppercase tracking-widest">{post.timestamp}</p>
+              )}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-3">
+                    <span className={`font-black uppercase tracking-tighter ${post.isPinned ? 'text-pink-500' : 'text-white'}`}>{post.author}</span>
+                    {post.isStaff && <ShieldCheck size={16} className="text-cyan-400" />}
+                  </div>
+                  {post.role && <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest mt-1">{post.role}</span>}
                 </div>
-                {post.author === "Sonja" && <ShieldCheck size={14} className="text-cyan-400" />}
+                <span className="text-zinc-600 font-mono text-[10px] uppercase tracking-widest">{post.timestamp}</span>
               </div>
-              <div className={`p-6 bg-zinc-900/20 border border-zinc-800 rounded-3xl transition-all ${!isLiteMode && 'group-hover:bg-zinc-900/40 group-hover:border-zinc-700'}`}>
-                <p className="text-zinc-300 leading-relaxed mb-6">
-                  {post.content}
-                </p>
-                {post.image && !isLiteMode && (
-                  <div className={`relative rounded-2xl overflow-hidden border border-zinc-800 transition-all duration-700 ${isStaticFilterActive ? 'blur-2xl grayscale' : 'blur-0'}`}>
-                    <img src={post.image} alt={post.alt} className="w-full h-auto" />
-                    {isStaticFilterActive && (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="bg-black/80 text-white text-[10px] font-black px-4 py-2 rounded-full border border-white/10 uppercase tracking-[0.2em]">
-                          Static Active
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                )}
-                {post.alt && (
-                  <div className="mt-4 flex items-center gap-2 opacity-30">
-                    <ImageIcon size={12} className="text-zinc-500" />
-                    <span className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest">Alt: {post.alt}</span>
-                  </div>
-                )}
+              
+              <div className="text-zinc-300 text-lg leading-relaxed mb-6 font-light whitespace-pre-wrap">
+                {post.content}
               </div>
-            </article>
+
+              {post.tags && (
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {post.tags.map(tag => (
+                    <span key={tag} className="text-[10px] uppercase tracking-widest bg-zinc-800/50 text-zinc-400 px-3 py-1 rounded-full border border-zinc-700">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+              
+              {post.image && (
+                <div className="relative rounded-2xl overflow-hidden border border-zinc-800 group">
+                  <img 
+                    src={post.image} 
+                    alt={post.alt} 
+                    className={`w-full h-auto transition-all duration-700 ${isSimplifiedMode ? 'blur-3xl opacity-20' : 'group-hover:scale-105'}`} 
+                  />
+                  {isSimplifiedMode && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center bg-black/40">
+                      <EyeOff size={32} className="text-zinc-500 mb-4" />
+                      <p className="text-zinc-400 text-xs font-mono uppercase tracking-widest leading-loose max-w-xs">
+                        [Image Blurred for Simplified View] <br /> {post.alt}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           ))}
         </div>
       </div>

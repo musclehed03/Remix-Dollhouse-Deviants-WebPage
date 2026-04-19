@@ -4,7 +4,7 @@ import { Settings, Brain } from 'lucide-react';
 
 export default function AccessibilityMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const { focusMode, toggleFocus, reduceMotion, toggleMotion, dyslexicFont, toggleFont, highContrast, toggleContrast, colorBlindMode, toggleColorBlind, lightMode, toggleLightMode, isLiteMode, toggleLiteMode } = useAccess();
+  const { focusMode, toggleFocus, reduceMotion, toggleMotion, dyslexicFont, toggleFont, highContrast, toggleContrast, colorBlindMode, toggleColorBlind, lightMode, toggleLightMode, isSimplifiedMode, toggleSimplifiedMode } = useAccess();
 
   return (
     <div className="fixed bottom-8 left-8 z-[10000] group">
@@ -40,8 +40,8 @@ export default function AccessibilityMenu() {
             <Toggle label="Readable Font (ADHD/Dyslexia)" active={dyslexicFont} onClick={toggleFont} />
             <Toggle label="High Contrast" active={highContrast} onClick={toggleContrast} />
             <Toggle label="Color Blind Support" active={colorBlindMode} onClick={toggleColorBlind} />
-            <Toggle label="Light Mode" active={lightMode} onClick={toggleLightMode} />
-            <Toggle label="Lite Mode (Hide Images)" active={isLiteMode} onClick={toggleLiteMode} />
+            <Toggle label="Light Theme" active={lightMode} onClick={toggleLightMode} />
+            <Toggle label="Simplified View (Hide Images)" active={isSimplifiedMode} onClick={toggleSimplifiedMode} />
           </div>
 
           <p className="mt-8 text-[9px] text-zinc-600 uppercase leading-relaxed italic border-t border-zinc-900 pt-6">

@@ -7,7 +7,7 @@ interface AccessProps {
   highContrast: boolean; toggleContrast: () => void;
   colorBlindMode: boolean; toggleColorBlind: () => void;
   lightMode: boolean; toggleLightMode: () => void;
-  isLiteMode: boolean; toggleLiteMode: () => void;
+  isSimplifiedMode: boolean; toggleSimplifiedMode: () => void;
 }
 
 const AccessContext = createContext<AccessProps | undefined>(undefined);
@@ -19,15 +19,15 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
   const [highContrast, setHighContrast] = useState(false);
   const [colorBlindMode, setColorBlindMode] = useState(false);
   const [lightMode, setLightMode] = useState(false);
-  const [isLiteMode, setIsLiteMode] = useState(() => {
-    const saved = localStorage.getItem('deviant_lite_mode');
+  const [isSimplifiedMode, setIsSimplifiedMode] = useState(() => {
+    const saved = localStorage.getItem('deviant_simplified_mode');
     return saved === 'true';
   });
 
-  const toggleLiteMode = () => {
-    setIsLiteMode(prev => {
+  const toggleSimplifiedMode = () => {
+    setIsSimplifiedMode(prev => {
       const newVal = !prev;
-      localStorage.setItem('deviant_lite_mode', String(newVal));
+      localStorage.setItem('deviant_simplified_mode', String(newVal));
       return newVal;
     });
   };
@@ -41,8 +41,8 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     highContrast ? body.classList.add('high-contrast') : body.classList.remove('high-contrast');
     colorBlindMode ? body.classList.add('color-blind-mode') : body.classList.remove('color-blind-mode');
     lightMode ? body.classList.add('light-mode') : body.classList.remove('light-mode');
-    isLiteMode ? body.classList.add('lite-mode') : body.classList.remove('lite-mode');
-  }, [focusMode, reduceMotion, dyslexicFont, highContrast, colorBlindMode, lightMode, isLiteMode]);
+    isSimplifiedMode ? body.classList.add('lite-mode') : body.classList.remove('lite-mode');
+  }, [focusMode, reduceMotion, dyslexicFont, highContrast, colorBlindMode, lightMode, isSimplifiedMode]);
 
   return (
     <AccessContext.Provider value={{ 
@@ -52,7 +52,7 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
       highContrast, toggleContrast: () => setHighContrast(!highContrast),
       colorBlindMode, toggleColorBlind: () => setColorBlindMode(!colorBlindMode),
       lightMode, toggleLightMode: () => setLightMode(!lightMode),
-      isLiteMode, toggleLiteMode
+      isSimplifiedMode, toggleSimplifiedMode
     }}>
       {children}
     </AccessContext.Provider>

@@ -12,12 +12,12 @@ interface SafeImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 }
 
 export default function SafeImage({ src, alt, className = '', description, ...props }: SafeImageProps) {
-  const { isLiteMode } = useAccess();
+  const { isSimplifiedMode } = useAccess();
 
   // If the image is purely decorative (no alt text), we tell screen readers to ignore it
   const isDecorative = !alt || alt === "";
 
-  if (isLiteMode) {
+  if (isSimplifiedMode) {
     return (
       <div 
         className={`bg-zinc-800 border-2 border-dashed border-zinc-700 flex flex-col items-center justify-center p-4 ${className}`}

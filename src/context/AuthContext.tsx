@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { auth, isFirebaseConfigured } from '@/lib/firebase';
+import { auth, db, isFirebaseConfigured } from '@/lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 import { 
   onAuthStateChanged, 
   GoogleAuthProvider, 
@@ -7,10 +8,14 @@ import {
   signOut, 
   User 
 } from 'firebase/auth';
+import { UserRole } from '../components/RoleGuard';
 
 const ADMIN_EMAIL = 'musclehed03@gmail.com'; 
+
+export type AuthUser = User & { role?: UserRole };
+
 interface AuthContextType {
-  user: User | null;
+  user: AuthUser | null;
   isAdmin: boolean;
   loading: boolean;
   isAgeVerified: boolean;
@@ -30,7 +35,7 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAgeVerified, setIsAgeVerified] = useState(false);
 
@@ -45,8 +50,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
 
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        // 1. PULL USER DATA FROM FIRESTORE
+        try {
+          const userRef = doc(db, "users", currentUser.uid);
+          const userSnap = await getDoc(userRef);
+
+          // Force 'architect' role if admin email to prevent lockouts, otherwise pull DB role
+          const computedRole = currentUser.email === ADMIN_EMAIL 
+            ? 'architect' 
+            : (userSnap.exists() ? userSnap.data().role || 'deviant' : 'deviant');
+
+          setUser({
+            ...currentUser,
+            role: computedRole
+          } as AuthUser);
+        } catch (error) {
+          console.error("Failed to fetch user roles:", error);
+          setUser({ ...currentUser, role: currentUser.email === ADMIN_EMAIL ? 'architect' : 'deviant' } as AuthUser);
+        }
+      } else {
+        setUser(null);
+      }
       setLoading(false);
     });
 

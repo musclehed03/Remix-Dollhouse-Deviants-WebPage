@@ -1,53 +1,136 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import Footer from '../components/Footer';
+import Layout from '../components/Layout';
+import { ShieldCheck, FileText, AlertTriangle, Phone, MessageSquare } from 'lucide-react';
 
 export default function Compliance() {
   return (
-    <div className="min-h-screen bg-black text-zinc-400 p-8 md:p-24 selection:bg-magenta-500/30 flex flex-col">
-      {/* Navigation */}
-      <nav className="mb-16">
-        <Link to="/" className="text-magenta-500 font-bold uppercase tracking-widest text-xs hover:text-white transition-colors">
-          ← Return to Hub
-        </Link>
-      </nav>
-      <div className="max-w-3xl mx-auto border border-zinc-900 p-8 md:p-16 bg-zinc-950/50 flex-grow mb-16">
-        <h1 className="text-white text-3xl font-bold italic tracking-tighter mb-8 border-b border-magenta-900/50 pb-4">
-          18 U.S.C. § 2257 RECORD-KEEPING COMPLIANCE STATEMENT
-        </h1>
-
-        <div className="space-y-8 text-sm leading-relaxed tracking-wide">
-          <section>
-            <p>
-              All models, actors, and individuals appearing in sexually explicit material on this website were over the age of 18 at the time the material was produced.
-            </p>
-          </section>
-
-          <section>
-            <p className="mb-4">
-              In accordance with Federal Law (18 U.S.C. § 2257 and 2257A), records required to be maintained are located at the following address:
-            </p>
-            <div className="mt-4 p-6 border-l-2 border-magenta-500 bg-black/40 space-y-2">
-              <p className="text-white font-bold">Custodian of Records: <span className="font-normal text-zinc-300">Sonja Kelley</span></p>
-              <p className="text-white font-bold">Address: <span className="font-normal text-zinc-300">701 16th Street Southwest, Apt. 39<br />Waverly, IA 50677</span></p>
+    <Layout>
+      <div className="min-h-screen bg-black text-zinc-400 font-sans selection:bg-pink-500/30">
+        
+        {/* --- HEADER --- */}
+        <div className="max-w-4xl mx-auto px-6 py-20">
+          <header className="mb-20 border-b border-zinc-900 pb-10">
+            <div className="flex items-center gap-3 mb-6">
+              <ShieldCheck className="text-pink-500" size={32} />
+              <span className="text-[10px] uppercase tracking-[0.4em] font-bold text-zinc-600">
+                Official Regulatory Filing
+              </span>
             </div>
-          </section>
-
-          <section>
-            <p>
-              For all content produced by Dollhouse Deviants, the primary records are maintained by the Custodian of Records. For content provided by third-party creators or community submissions, Dollhouse Deviants relies on the 2257 compliance statements provided by those respective producers.
+            <h1 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter italic">
+              2257 <span className="text-pink-500">Compliance</span>
+            </h1>
+            <p className="mt-4 text-zinc-500 italic">
+              Statement of Record Keeping and Content Verification Protocols.
             </p>
-          </section>
+          </header>
 
-          <section className="pt-8 border-t border-zinc-900">
-            <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-600">
-              Last Updated: April 2026
-            </p>
+          {/* --- LEGAL DISCLOSURE SECTION --- */}
+          <article className="prose prose-invert max-w-none space-y-12">
+            <section>
+              <h3 className="text-white uppercase tracking-widest text-sm font-bold flex items-center gap-2">
+                <FileText size={16} className="text-pink-500" />
+                18 U.S.C. § 2257 Statement
+              </h3>
+              <p className="text-sm leading-relaxed text-zinc-400 mt-4">
+                All models, actors, and individuals appearing in sexually explicit material on 
+                <strong> Dollhouse Deviants </strong> were at least 18 years of age at the time 
+                the visual depictions were created. 
+              </p>
+              <p className="text-sm leading-relaxed text-zinc-400">
+                In compliance with the record-keeping requirements of 18 U.S.C. § 2257 and 
+                28 C.F.R. Part 75, the original records required by these regulations are 
+                maintained by the Custodian of Records at the following location:
+              </p>
+              
+              <div className="mt-6 p-6 bg-zinc-900/40 border border-zinc-800 rounded-2xl italic text-zinc-300 text-sm">
+                <p>Custodian of Records: Sonja Kelley</p>
+                <p>Location: Digital Archive - Waverly, IA</p>
+                <p>Contact: sonja-on-fire@dollhousedeviants.com</p>
+              </div>
+            </section>
+
+            <section>
+              <h3 className="text-white uppercase tracking-widest text-sm font-bold flex items-center gap-2">
+                Content Verification
+              </h3>
+              <p className="text-sm leading-relaxed text-zinc-400 mt-4">
+                Every piece of content uploaded to <strong>The Vault</strong> is subjected to a 
+                rigorous identity verification process. This includes government-issued ID 
+                verification and real-time biometric matching to ensure absolute consent 
+                and legal age compliance.
+              </p>
+            </section>
+          </article>
+
+          {/* --- THE ADDENDUM: VICTIM ADVOCACY & SUPPORT --- */}
+          {/* This is styled to look like a mandatory legal footer to stay discrete */}
+          <section className="mt-32 pt-16 border-t-2 border-zinc-900">
+            <div className="bg-zinc-900/30 border border-zinc-800 rounded-[2.5rem] p-10 md:p-16 relative overflow-hidden">
+              {/* Background Glow */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-pink-600/5 blur-[100px] pointer-events-none"></div>
+              
+              <div className="relative z-10">
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="bg-pink-600/10 p-3 rounded-xl border border-pink-500/20">
+                    <AlertTriangle className="text-pink-500" size={24} />
+                  </div>
+                  <h2 className="text-2xl font-black text-white uppercase tracking-tight italic">
+                    Victim Advocacy & <span className="text-pink-500">Support Resources</span>
+                  </h2>
+                </div>
+                
+                <p className="text-zinc-400 text-sm leading-relaxed mb-10 max-w-2xl">
+                  Dollhouse Deviants maintains a zero-tolerance policy regarding human trafficking, 
+                  coercion, and non-consensual content. If you are being held against your will, 
+                  seeking a way out of an exploitative situation, or need confidential help, 
+                  refer to the following certified advocacy protocols:
+                </p>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Hotline Card */}
+                  <div className="group p-8 bg-black/40 border border-zinc-800 rounded-3xl hover:border-pink-500/50 transition-all duration-500">
+                    <div className="flex items-center gap-3 mb-4">
+                      <Phone size={16} className="text-zinc-600 group-hover:text-pink-500 transition-colors" />
+                      <h4 className="text-zinc-500 text-[10px] uppercase tracking-widest">National Hotline</h4>
+                    </div>
+                    <p className="text-white font-black text-2xl mb-6 tracking-tight">1-888-373-7888</p>
+                    <a 
+                      href="tel:18883737888" 
+                      className="inline-flex items-center gap-2 bg-zinc-800 hover:bg-pink-600 text-white text-xs font-bold uppercase tracking-[0.2em] px-6 py-3 rounded-xl transition-all"
+                    >
+                      Call Now
+                    </a>
+                  </div>
+
+                  {/* Text Card */}
+                  <div className="group p-8 bg-black/40 border border-zinc-800 rounded-3xl hover:border-pink-500/50 transition-all duration-500">
+                    <div className="flex items-center gap-3 mb-4">
+                      <MessageSquare size={16} className="text-zinc-600 group-hover:text-pink-500 transition-colors" />
+                      <h4 className="text-zinc-500 text-[10px] uppercase tracking-widest">SMS Liaison</h4>
+                    </div>
+                    <p className="text-white font-black text-2xl mb-2 tracking-tight">Text "HELP" to 233733</p>
+                    <p className="text-[10px] text-zinc-600 uppercase tracking-tighter mb-6">
+                      (Available 24/7 • English & Spanish)
+                    </p>
+                    <a 
+                      href="sms:233733" 
+                      className="inline-flex items-center gap-2 border border-zinc-800 hover:border-pink-500 text-zinc-400 hover:text-white text-xs font-bold uppercase tracking-[0.2em] px-6 py-3 rounded-xl transition-all"
+                    >
+                      Send Message
+                    </a>
+                  </div>
+                </div>
+
+                <div className="mt-12 flex flex-col items-center gap-2 text-[9px] uppercase tracking-[0.3em] text-zinc-700">
+                  <div className="w-full h-px bg-zinc-900 mb-4"></div>
+                  <span>Protocol 2257-S: Community Protection Mandate</span>
+                  <span>Custodian Verified • Sanctuary Safety Initiative</span>
+                </div>
+              </div>
+            </div>
           </section>
         </div>
       </div>
-
-      <Footer />
-    </div>
+    </Layout>
   );
 }

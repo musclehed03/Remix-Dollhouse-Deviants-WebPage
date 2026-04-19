@@ -4,8 +4,36 @@ import { useAccess } from '../context/AccessibilityContext';
 import { useAuth } from '../context/AuthContext';
 import { Zap, ZapOff } from 'lucide-react';
 
+const SafetyResources = () => {
+  const handleQuickExit = () => {
+    // Instantly sends them to a neutral page
+    window.location.replace("https://www.weather.com");
+  };
+
+  return (
+    <div className="mt-8 pt-8 border-t border-zinc-900 flex flex-wrap gap-6 text-[10px] uppercase tracking-widest text-zinc-600">
+      {/* DISCRETE LINK */}
+      <a href="/safety" className="hover:text-pink-500 transition-colors">
+        Personal Safety & Site Security
+      </a>
+      
+      {/* QUICK ESCAPE */}
+      <button 
+        onClick={handleQuickExit}
+        className="bg-zinc-800 px-3 py-1 rounded hover:bg-red-900 text-white font-bold transition-colors"
+      >
+        Quick Exit
+      </button>
+      
+      <span className="ml-auto opacity-30 flex items-center">
+        Hotline: 1-888-373-7888 (Confidential 24/7)
+      </span>
+    </div>
+  );
+};
+
 export default function Footer() {
-  const { isLiteMode, toggleLiteMode } = useAccess();
+  const { isSimplifiedMode, toggleSimplifiedMode } = useAccess();
   const { user, loginWithGoogle, logout } = useAuth();
 
   // 1. Replace 'YOUR_ID_HERE' with the ID you copied from PayPal
@@ -75,6 +103,7 @@ export default function Footer() {
                 Download Media Kit
               </a>
             </li>
+            <li><Link to="/safety" className="hover:text-pink-500 transition-colors text-pink-500/70">Personal Safety & Site Security</Link></li>
             <li><Link to="/compliance" className="hover:text-white transition-colors">2257 Compliance</Link></li>
             <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy & Consent</Link></li>
             <li><Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
@@ -92,6 +121,10 @@ export default function Footer() {
         >
           {user ? 'Sign Out' : 'Architect Login'}
         </button>
+      </div>
+      
+      <div className="max-w-7xl mx-auto w-full">
+        <SafetyResources />
       </div>
     </footer>
   );

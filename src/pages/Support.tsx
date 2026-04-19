@@ -1,82 +1,127 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import Footer from '../components/Footer';
-import SafeImage from '../components/SafeImage';
+import Layout from '../components/Layout';
+import { ShieldCheck, Zap, Crown, Check, Lock, Terminal } from 'lucide-react';
+
+const tiers = [
+  {
+    name: "Deviant Member",
+    price: "Free",
+    tagline: "The Entry Protocol",
+    description: "Basic access to the Sanctuary and the public social wire.",
+    features: [
+      "Access to The Circuit (Social Feed)",
+      "View Public Galleries",
+      "Standard Boutique Access",
+      "Community Chat Permissions"
+    ],
+    buttonText: "Join the Collective",
+    highlight: false
+  },
+  {
+    name: "Architect Tier",
+    price: "$20/mo",
+    tagline: "The Inner Circle",
+    description: "The highest clearance level. You don't just watch the Dollhouse; you help build it.",
+    features: [
+      "Full Vault Access (18+ Content)",
+      "Exclusive Architect-Only Logs",
+      "Early Access to Boutique Drops",
+      "The Neon 'Architect' Profile Badge",
+      "1-on-1 Sanctuary Support Chat",
+      "Ad-Free Stealth Browsing"
+    ],
+    buttonText: "Claim Clearance",
+    highlight: true
+  }
+];
 
 export default function Support() {
-  const paypalId = "AZVCASBGAJ8AL";
-
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-magenta-500/30 flex flex-col">
-      <nav className="p-8 flex justify-between items-center border-b border-zinc-900 bg-black/50 backdrop-blur-md sticky top-0 z-50">
-        <Link to="/" className="text-magenta-500 font-bold uppercase tracking-widest text-xs hover:text-white transition-colors">
-          ← Back to Hub
-        </Link>
-        <h1 className="text-2xl font-light tracking-[0.4em] uppercase">Community</h1>
-        <div className="w-20"></div>
-      </nav>
-
-      <main className="flex-grow max-w-4xl mx-auto w-full px-6 py-16">
-        {/* The Cover Image (Your Flow Image) */}
-        <div className="w-full rounded-2xl overflow-hidden border border-zinc-800 shadow-[0_0_30px_rgba(255,105,180,0.15)] mb-16 relative group">
-          <SafeImage 
-            src="/thank-you.png" 
-            alt="Thank You - You Make All This Possible" 
-            className="w-full h-auto object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700"
-            onError={(e) => {
-              // Fallback if the image isn't uploaded yet
-              e.currentTarget.src = "https://images.unsplash.com/photo-1551818255-e6e10975bc17?auto=format&fit=crop&w=1200&q=80";
-            }}
-          />
-          <div className="absolute inset-0 bg-magenta-500/10 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-        </div>
-
-        <div className="text-center space-y-8 mb-24">
-          <h2 className="text-4xl md:text-6xl font-bold italic tracking-tighter">
-            Your Presence is <span className="text-magenta-500">Power.</span>
-          </h2>
-          <p className="text-zinc-400 leading-relaxed max-w-2xl mx-auto font-light text-lg">
-            Just by clicking on our website, perusing the galleries, and witnessing our stories, you are supporting trans, non-binary, and neurodivergent creators. You don't have to spend a dime to be a valued part of the Dollhouse Deviants community. 
-            <br/><br/>
-            <span className="text-white font-bold italic">We see you, and we appreciate you.</span>
+    <Layout>
+      <div className="min-h-screen bg-black text-zinc-400 font-sans selection:bg-pink-500/30">
+        
+        {/* --- HERO SECTION --- */}
+        <section className="max-w-6xl mx-auto px-6 pt-32 pb-20 text-center">
+          <div className="flex justify-center mb-6">
+            <div className="p-3 bg-pink-600/10 rounded-2xl border border-pink-500/20">
+              <ShieldCheck className="text-pink-500" size={40} />
+            </div>
+          </div>
+          <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter italic mb-6">
+            Support the <span className="text-pink-500">Sanctuary</span>
+          </h1>
+          <p className="max-w-2xl mx-auto text-zinc-500 leading-relaxed text-lg italic">
+            "Every brick in this house is built by the community. Your support ensures the Dollhouse remains a safe, 
+            unconventional haven for creators and deviants alike."
           </p>
-        </div>
+        </section>
 
-        {/* The Buttons */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-          {/* Financial Support */}
-          <div className="bg-zinc-900/30 border border-zinc-800 p-10 text-center rounded-xl hover:border-magenta-500/50 transition-colors flex flex-col h-full">
-            <h3 className="text-white font-bold uppercase tracking-widest text-sm mb-4">Financial Support</h3>
-            <p className="text-xs text-zinc-500 mb-8 leading-relaxed flex-grow">
-              If you have the means and wish to contribute financially, your support directly funds our creators and mental health advocacy. No pressure, ever.
-            </p>
-            <a 
-              href={`https://www.paypal.com/donate/?hosted_button_id=${paypalId}`}
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-block w-full bg-magenta-600 text-white px-6 py-4 text-xs font-bold uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-colors"
-            >
-              Donate via PayPal
-            </a>
+        {/* --- TIER GRID --- */}
+        <section className="max-w-5xl mx-auto px-6 pb-32">
+          <div className="grid md:grid-cols-2 gap-8">
+            {tiers.map((tier) => (
+              <div 
+                key={tier.name}
+                className={`relative p-10 rounded-[3rem] border transition-all duration-500 group ${
+                  tier.highlight 
+                    ? 'bg-zinc-900/40 border-pink-500/50 shadow-[0_0_40px_rgba(219,39,119,0.1)]' 
+                    : 'bg-zinc-900/20 border-zinc-800 hover:border-zinc-700'
+                }`}
+              >
+                {tier.highlight && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-pink-600 text-white text-[10px] font-black uppercase px-4 py-1 rounded-full tracking-[0.2em] shadow-lg">
+                    Recommended Clearance
+                  </div>
+                )}
+
+                <div className="mb-8">
+                  <h3 className="text-2xl font-black text-white uppercase italic tracking-tight">{tier.name}</h3>
+                  <p className="text-pink-500 font-mono text-[10px] uppercase tracking-widest mt-1">{tier.tagline}</p>
+                </div>
+
+                <div className="mb-8">
+                  <span className="text-4xl font-black text-white">{tier.price}</span>
+                  <span className="text-zinc-600 text-xs ml-2 uppercase">/ Access</span>
+                </div>
+
+                <p className="text-sm text-zinc-400 mb-10 leading-relaxed">
+                  {tier.description}
+                </p>
+
+                <ul className="space-y-4 mb-12">
+                  {tier.features.map((feature) => (
+                    <li key={feature} className="flex items-start gap-3 text-xs uppercase tracking-tight font-medium group-hover:text-zinc-200 transition-colors">
+                      <Check size={14} className="text-pink-500 mt-0.5" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+
+                <button className={`w-full py-5 rounded-2xl font-black uppercase tracking-[0.2em] text-xs transition-all duration-300 ${
+                  tier.highlight
+                    ? 'bg-pink-600 hover:bg-white hover:text-black text-white shadow-[0_0_20px_rgba(219,39,119,0.3)]'
+                    : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-300'
+                }`}>
+                  {tier.buttonText}
+                </button>
+              </div>
+            ))}
           </div>
 
-          {/* Creative Support */}
-          <div className="bg-zinc-900/30 border border-zinc-800 p-10 text-center rounded-xl hover:border-blue-500/50 transition-colors flex flex-col h-full">
-            <h3 className="text-white font-bold uppercase tracking-widest text-sm mb-4">Creative Support</h3>
-            <p className="text-xs text-zinc-500 mb-8 leading-relaxed flex-grow">
-              Are you a creator? The best way to support the Dollhouse is to help us build it. We are always looking for new voices and visions to feature.
+          {/* --- MISSION FOOTER --- */}
+          <div className="mt-24 text-center border-t border-zinc-900 pt-16">
+            <div className="flex items-center justify-center gap-4 text-zinc-700 mb-8">
+              <Terminal size={16} />
+              <span className="text-[10px] uppercase tracking-[0.5em]">System.Autonomy_Protocol // Enabled</span>
+            </div>
+            <p className="text-zinc-600 text-xs max-w-xl mx-auto leading-relaxed">
+              Subscription funds are allocated directly to platform hosting, trans-rights advocacy through 
+              <strong> The Trevor Project</strong>, and the production of exclusive sanctuary content. 
+              All transactions are processed through high-risk secure gateways.
             </p>
-            <a 
-              href="mailto:sonja@dollhousedeviants.com?subject=Dollhouse%20Deviants%20Contributor%20Submission"
-              className="inline-block w-full border border-zinc-600 text-zinc-300 px-6 py-4 text-xs font-bold uppercase tracking-[0.2em] hover:border-white hover:text-white transition-colors"
-            >
-              Submit Your Work
-            </a>
           </div>
-        </div>
-      </main>
-
-      <Footer />
-    </div>
+        </section>
+      </div>
+    </Layout>
   );
 }

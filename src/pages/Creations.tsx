@@ -11,7 +11,7 @@ const artworks = [
 ];
 
 export default function Creations() {
-  const { isLiteMode } = useAccess();
+  const { isSimplifiedMode } = useAccess();
 
   return (
     <Layout>
@@ -29,10 +29,10 @@ export default function Creations() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {artworks.map((work) => (
             <div key={work.id} className="group relative">
-              <div className={`relative overflow-hidden rounded-3xl bg-zinc-900 aspect-[4/5] border border-zinc-800 transition-all duration-700 ${!isLiteMode && 'group-hover:border-purple-500/50 group-hover:shadow-2xl'}`}>
+              <div className={`relative overflow-hidden rounded-3xl bg-zinc-900 aspect-[4/5] border border-zinc-800 transition-all duration-700 ${!isSimplifiedMode && 'group-hover:border-purple-500/50 group-hover:shadow-2xl'}`}>
                 {/* Image Placeholder */}
                 <div className="absolute inset-0 flex items-center justify-center text-zinc-800">
-                  {!isLiteMode ? (
+                  {!isSimplifiedMode ? (
                     <img 
                       src={work.img} 
                       alt={work.alt} 
@@ -41,13 +41,13 @@ export default function Creations() {
                   ) : (
                     <div className="flex flex-col items-center gap-2">
                       <Camera size={48} />
-                      <span className="text-[10px] uppercase font-mono tracking-widest">[Image Hidden in Lite Mode]</span>
+                      <span className="text-[10px] uppercase font-mono tracking-widest">[Image Hidden in Simplified View]</span>
                     </div>
                   )}
                 </div>
 
                 {/* Info Overlay */}
-                <div className={`absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-8 flex flex-col justify-end transition-opacity duration-500 ${!isLiteMode ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
+                <div className={`absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-8 flex flex-col justify-end transition-opacity duration-500 ${!isSimplifiedMode ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
                   <span className="text-purple-400 font-mono text-[10px] uppercase tracking-[0.3em] mb-2">{work.category}</span>
                   <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-4">{work.title}</h3>
                   <div className="flex gap-4">

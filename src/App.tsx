@@ -21,10 +21,11 @@ import Circuit from './pages/Circuit';
 import Echoes from './pages/Echoes';
 import About from './pages/About';
 import OurStory from './pages/OurStory';
+import Support from './pages/Support';
 import Compliance from './pages/Compliance';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
-import Support from './pages/Support';
+import Safety from './pages/Safety';
 import UserProfile from './pages/UserProfile';
 import TrevorBanner from './components/TrevorBanner';
 import AccessibilityMenu from './components/AccessibilityMenu';
@@ -55,10 +56,12 @@ export default function App() {
           <Route path="/echoes" element={<Echoes />} />
           <Route path="/about" element={<About />} />
           <Route path="/our-story" element={<OurStory />} />
+          <Route path="/support" element={<Support />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/compliance" element={<Compliance />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
+          <Route path="/safety" element={<Safety />} />
           <Route path="/support" element={<Support />} />
           <Route path="/profile" element={<UserProfile />} />
           <Route path="*" element={<Navigate to="/" />} />

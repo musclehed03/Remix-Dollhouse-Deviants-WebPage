@@ -4,12 +4,12 @@ import { useAccess } from '../context/AccessibilityContext';
 import { Zap } from 'lucide-react';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const { isLiteMode, toggleLiteMode } = useAccess();
+  const { isSimplifiedMode, toggleSimplifiedMode } = useAccess();
   const [showSlowLoadTrigger, setShowSlowLoadTrigger] = useState(false);
 
   useEffect(() => {
-    // If Lite Mode is already on, don't show the trigger
-    if (isLiteMode) return;
+    // If Simplified Mode is already on, don't show the trigger
+    if (isSimplifiedMode) return;
 
     // Show the slow load trigger after 4 seconds to catch users on slow connections
     const timer = setTimeout(() => {
@@ -17,25 +17,25 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     }, 4000);
 
     return () => clearTimeout(timer);
-  }, [isLiteMode]);
+  }, [isSimplifiedMode]);
 
   return (
     <div className="min-h-screen bg-[#121212] flex flex-col relative overflow-x-hidden font-sans selection:bg-magenta-500/30 selection:text-white">
       {/* Slow Load Trigger Banner */}
-      {showSlowLoadTrigger && !isLiteMode && (
+      {showSlowLoadTrigger && !isSimplifiedMode && (
         <div className="fixed top-0 left-0 w-full z-[10000] bg-zinc-900 border-b border-magenta-500/30 p-3 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in shadow-lg">
           <span className="text-zinc-300 text-xs tracking-widest uppercase text-center">
             Not loading fast? We got your back.
           </span>
           <button 
             onClick={() => {
-              toggleLiteMode();
+              toggleSimplifiedMode();
               setShowSlowLoadTrigger(false);
             }}
             className="flex items-center gap-2 bg-magenta-500 text-white px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-magenta-600 transition-colors"
           >
             <Zap size={12} />
-            Enable Lite Mode
+            Enable Simplified View
           </button>
           <button 
             onClick={() => setShowSlowLoadTrigger(false)}

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import SafeImage from './SafeImage';
+import { Heart } from 'lucide-react';
 
 export default function TrevorBanner() {
   const [hasScrolled, setHasScrolled] = useState(false);
-  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,19 +41,10 @@ export default function TrevorBanner() {
         <p className="text-[8px] uppercase tracking-widest text-zinc-500 mt-0.5">Click to donate</p>
       </div>
       
-      {/* Orange Badge with Logo */}
-      <div className="h-10 flex items-center justify-center bg-[#FF6B00] rounded-full px-4 shadow-[0_0_15px_rgba(255,107,0,0.4)]">
-        {imageError ? (
-          <span className="text-white font-black text-xs tracking-tighter whitespace-nowrap">THE TREVOR PROJECT</span>
-        ) : (
-          <SafeImage 
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/The_Trevor_Project_logo.svg/512px-The_Trevor_Project_logo.svg.png" 
-            alt="The Trevor Project" 
-            className="h-4 w-auto filter brightness-0 invert !grayscale-0"
-            referrerPolicy="no-referrer"
-            onError={() => setImageError(true)}
-          />
-        )}
+      {/* Orange Badge with Text */}
+      <div className="h-10 flex items-center justify-center gap-2 bg-[#FF6B00] rounded-full px-5 shadow-[0_0_15px_rgba(255,107,0,0.4)]">
+        <Heart size={14} className="text-white fill-white" />
+        <span className="text-white font-black text-xs tracking-widest whitespace-nowrap">THE TREVOR PROJECT</span>
       </div>
     </a>
   );
